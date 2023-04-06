@@ -1,0 +1,25 @@
+#pragma once
+
+#include <juce_gui_extra/juce_gui_extra.h>
+
+struct MainComponent final
+    : juce::Component
+    , juce::Timer
+{
+    MainComponent();
+    ~MainComponent() override = default;
+
+    auto paint(juce::Graphics& g) -> void override;
+    auto resized() -> void override;
+
+    auto timerCallback() -> void override;
+
+private:
+    juce::TextButton _play{"Play"};
+    juce::Slider _duration{juce::Slider::LinearHorizontal, juce::Slider::TextBoxRight};
+
+    juce::Rectangle<int> _canvas{};
+    bool _isRunning{false};
+    juce::Time _startTime{};
+    juce::Time _lastAnimation{};
+};
