@@ -16,6 +16,7 @@ struct MainComponent final
 
 private:
     juce::TextButton _play{"Play"};
+    juce::ComboBox _transition{"Transition"};
     juce::Slider _duration{juce::Slider::LinearHorizontal, juce::Slider::TextBoxRight};
 
     juce::Rectangle<int> _canvas{};
