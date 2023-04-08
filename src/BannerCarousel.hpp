@@ -35,7 +35,7 @@ struct BannerCarousel final : juce::Component
 private:
     struct Content final : juce::Component
     {
-        Content() : _move{makeAnimationSpec(), 0.0F, 1.0F} {}
+        Content() : _move{makeTransition(), 0.0F, 1.0F} {}
 
         ~Content() override = default;
 
@@ -110,17 +110,15 @@ private:
         }
 
     private:
-        auto makeAnimationSpec() -> AnimationSpec
+        auto makeTransition() -> Transition
         {
-            auto easeInOutBack = [](double t) {
-                return CubicInterpolation{}({0.68, -0.2}, {0.32, 1.2}, t).y;
-            };
+
             return {
-                .parent         = this,
-                .trigger        = AnimationTriggerType::Manual,
-                .transitionTime = Milliseconds<int>{800},
-                .isLooping      = false,
-                .ease           = easeInOutBack,
+                .parent    = this,
+                .trigger   = AnimationTriggerType::Manual,
+                .duration  = Milliseconds<int>{800},
+                .isLooping = false,
+                .ease      = EaseInOutBack,
             };
         }
 

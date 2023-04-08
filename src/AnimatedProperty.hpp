@@ -44,11 +44,11 @@ struct AnimatedPropertyInterpolator<juce::Rectangle<T>>
     }
 };
 
-struct AnimationSpec
+struct Transition
 {
     juce::Component* parent{nullptr};
     AnimationTriggerType trigger{AnimationTriggerType::Hover};
-    Milliseconds<int> transitionTime{600};
+    Milliseconds<int> duration{600};
     bool isLooping{false};
     std::function<double(double)> ease{[](double t) { return t; }};
 };
@@ -56,15 +56,15 @@ struct AnimationSpec
 template<typename T>
 struct AnimatedProperty
 {
-    AnimatedProperty(AnimationSpec const& spec, T const& a, T const& b)
-        : _spec{spec}
-        , _trigger{makeAnimationTrigger(_spec.trigger, _timer, _spec.parent)}
+    AnimatedProperty(Transition const& transition, T const& a, T const& b)
+        : _transition{transition}
+        , _trigger{makeAnimationTrigger(_transition.trigger, _timer, _transition.parent)}
         , _keyframes{a, b}
     {
-        jassert(_spec.parent != nullptr);
+        jassert(_transition.parent != nullptr);
 
-        duration(_spec.transitionTime);
-        _timer.onTick = [this] { _spec.parent->repaint(); };
+        duration(_transition.duration);
+        _timer.onTick = [this] { _transition.parent->repaint(); };
     }
 
     AnimatedProperty(juce::Component* parent, T const& a, T const& b)
@@ -73,7 +73,7 @@ struct AnimatedProperty
 
     auto duration(Milliseconds<int> ms)
     {
-        _spec.transitionTime = ms;
+        _transition.duration = ms;
         _timer.duration(ms);
     }
 
@@ -86,14 +86,14 @@ struct AnimatedProperty
         return AnimatedPropertyInterpolator<T>::interpolate(
             _keyframes.front(),
             _keyframes.back(),
-            _spec.ease(_timer.position())
+            _transition.ease(_timer.position())
         );
     }
 
 private:
-    AnimationSpec _spec;
+    Transition _transition;
 
-    AnimationTimer _timer{_spec.isLooping};
+    AnimationTimer _timer{_transition.isLooping};
     std::unique_ptr<AnimationTrigger> _trigger;
 
     std::array<T, 2> _keyframes;

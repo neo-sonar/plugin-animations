@@ -64,4 +64,16 @@ inline constexpr auto makeTransition = [](int index, float ts) {
     return juce::Point<float>{};
 };
 
+inline constexpr auto Linear = [](double t) {
+    return CubicInterpolation{}({0.0F, 0.0}, {1.0, 1.0}, t).y;
+};
+inline constexpr auto EaseOut = [](double t) {
+    return CubicInterpolation{}({0.0, 0.0}, {0.58, 1.0}, t).y;
+};
+inline constexpr auto EaseInOut = [](double t) {
+    return CubicInterpolation{}({0.42, 0.0}, {0.58, 1.0}, t).y;
+};
+inline constexpr auto EaseInOutBack = [](double t) {
+    return CubicInterpolation{}({0.68, -0.2}, {0.32, 1.2}, t).y;
+};
 }  // namespace mc

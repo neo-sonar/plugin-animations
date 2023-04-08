@@ -17,9 +17,9 @@ struct LoaderCarousel final : juce::Component
     static_assert(NumPoints >= 3);
 
     LoaderCarousel()
-        : _scale1{makeAnimationSpec(), 1.0F, 0.0F}
-        , _translate2{makeAnimationSpec(), 0.0F, 24.0F}
-        , _scale3{makeAnimationSpec(), 0.0F, 1.0F}
+        : _scale1{makeTransition(), 1.0F, 0.0F}
+        , _translate2{makeTransition(), 0.0F, 24.0F}
+        , _scale3{makeTransition(), 0.0F, 1.0F}
     {
         _scale1.trigger();
         _translate2.trigger();
@@ -52,13 +52,14 @@ struct LoaderCarousel final : juce::Component
     }
 
 private:
-    auto makeAnimationSpec() -> AnimationSpec
+    auto makeTransition() -> Transition
     {
         return {
-            .parent         = this,
-            .trigger        = AnimationTriggerType::Manual,
-            .transitionTime = Milliseconds<int>{600},
-            .isLooping      = true,
+            .parent    = this,
+            .trigger   = AnimationTriggerType::Manual,
+            .duration  = Milliseconds<int>{600},
+            .isLooping = true,
+            .ease      = EaseInOutBack,
         };
     }
 
