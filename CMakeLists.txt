@@ -27,6 +27,11 @@ juce_add_gui_app(AnimationDemo PRODUCT_NAME "Animation Demo")
 
 target_sources(AnimationDemo
     PRIVATE
+        "src/AnimatedButton.cpp"
+        "src/AnimatedButton.hpp"
+        "src/AnimatedProperty.hpp"
+        "src/AnimationTimer.hpp"
+        "src/CubicInterpolation.hpp"
         "src/Main.cpp"
         "src/MainComponent.hpp"
         "src/MainComponent.cpp"

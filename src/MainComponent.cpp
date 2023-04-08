@@ -1,28 +1,5 @@
 #include "MainComponent.hpp"
 
-AnimatedButton::AnimatedButton(juce::String const& name) : Button{name}
-{
-    _font.duration(250.0);
-    _margin.duration(400.0);
-    _corner.duration(400.0);
-    _background.duration(600.0);
-    _text.duration(600.0);
-}
-
-auto AnimatedButton::paintButton(juce::Graphics& g, bool /*isHighlighted*/, bool /*isDown*/)
-    -> void
-{
-    auto const bounds = getLocalBounds().toFloat();
-    auto const area   = bounds.reduced(bounds.proportionOfWidth(_margin.get()), 0.0F);
-
-    g.setColour(_background.get());
-    g.fillRoundedRectangle(area, _corner.get());
-
-    g.setFont(juce::Font{16.0F}.withHorizontalScale(_font.get()));
-    g.setColour(_text.get());
-    g.drawText(getButtonText(), area, juce::Justification::centred);
-}
-
 MainComponent::MainComponent()
 {
     _play.onClick = [this] {
@@ -84,7 +61,7 @@ auto MainComponent::paint(juce::Graphics& g) -> void
     auto const startX = canvas.getTopLeft().x + 75.0F;
     auto const endX   = canvas.getBottomRight().x - 75.0F;
 
-    auto const transition = makeTransition(_transition.getSelectedId(), ts);
+    auto const transition = mc::makeTransition(_transition.getSelectedId(), ts);
     auto const x          = juce::jmap(transition.y, startX, endX);
 
     g.setColour(juce::Colours::red);
