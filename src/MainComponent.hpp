@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AnimatedButton.hpp"
+#include "LoaderCarousel.hpp"
 
 struct MainComponent final
     : juce::Component
@@ -16,6 +17,7 @@ struct MainComponent final
 
 private:
     mc::AnimatedButton _play{"Play"};
+    mc::LoaderCarousel _loader{};
     juce::ComboBox _transition{"Transition"};
     juce::Slider _duration{juce::Slider::LinearHorizontal, juce::Slider::TextBoxRight};
 

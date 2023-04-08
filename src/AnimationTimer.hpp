@@ -7,7 +7,8 @@ namespace mc {
 
 struct AnimationTimer final : juce::Timer
 {
-    AnimationTimer()           = default;
+    explicit AnimationTimer(bool isLooping = false) : _isLooping{isLooping} {}
+
     ~AnimationTimer() override = default;
 
     auto duration(Milliseconds<int> ms) -> void { _duration = ms; }
@@ -27,10 +28,16 @@ struct AnimationTimer final : juce::Timer
 private:
     auto timerCallback() -> void override
     {
-        auto delta = SystemClock::now() - _startTime;
+        auto now   = SystemClock::now();
+        auto delta = now - _startTime;
         if (delta > _duration) {
-            delta = _duration;
-            stopTimer();
+            if (_isLooping) {
+                delta      = delta - _duration;
+                _startTime = now - delta;
+            } else {
+                delta = _duration;
+                stopTimer();
+            }
         }
 
         _position = std::chrono::duration_cast<Milliseconds<double>>(delta)
@@ -40,6 +47,7 @@ private:
         if (onTick) { onTick(); }
     }
 
+    bool _isLooping;
     bool _forward{true};
     double _position{0.0};
     Milliseconds<int> _duration{1000};

@@ -11,7 +11,6 @@ struct AnimationTrigger
 
     virtual ~AnimationTrigger() = default;
 
-protected:
     auto triggerUp() -> void { _timer.restart(true); }
 
     auto triggerDown() -> void { _timer.restart(false); }
@@ -48,6 +47,7 @@ struct AnimationTriggers
 
 enum struct AnimationTriggerType
 {
+    Manual,
     Hover,
 };
 
@@ -57,6 +57,9 @@ enum struct AnimationTriggerType
     juce::Component* parent
 ) -> std::unique_ptr<AnimationTrigger>
 {
+    if (type == AnimationTriggerType::Manual) {
+        return std::make_unique<AnimationTrigger>(timer);
+    }
     if (type == AnimationTriggerType::Hover) {
         return std::make_unique<AnimationTriggers::Hover>(timer, parent);
     }

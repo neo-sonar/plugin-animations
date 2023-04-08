@@ -25,6 +25,7 @@ MainComponent::MainComponent()
     _duration.setValue(1'000.0);
 
     addAndMakeVisible(_play);
+    addAndMakeVisible(_loader);
     addAndMakeVisible(_transition);
     addAndMakeVisible(_duration);
     setSize(600, 400);
@@ -72,8 +73,9 @@ auto MainComponent::resized() -> void
 {
     auto area        = getLocalBounds();
     auto controls    = area.removeFromTop(area.proportionOfHeight(0.1));
-    auto const width = controls.proportionOfWidth(0.3333);
+    auto const width = controls.proportionOfWidth(0.25);
     _play.setBounds(controls.removeFromLeft(width).reduced(4));
+    _loader.setBounds(controls.removeFromLeft(width).reduced(4));
     _transition.setBounds(controls.removeFromLeft(width).reduced(4));
     _duration.setBounds(controls.reduced(4));
 

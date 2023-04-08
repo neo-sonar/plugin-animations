@@ -47,7 +47,7 @@ struct AnimationSpec
 {
     juce::Component* parent{nullptr};
     AnimationTriggerType trigger{AnimationTriggerType::Hover};
-    Milliseconds<int> transitionTime{400};
+    Milliseconds<int> transitionTime{600};
     bool isLooping{false};
 };
 
@@ -77,6 +77,8 @@ struct AnimatedProperty
 
     auto keyframes(T const& a, T const& b) { _keyframes = {a, b}; }
 
+    auto trigger() { _trigger->triggerUp(); }
+
     [[nodiscard]] auto get() const -> T
     {
         return AnimatedPropertyInterpolator<T>::interpolate(
@@ -89,7 +91,7 @@ struct AnimatedProperty
 private:
     AnimationSpec _spec;
 
-    AnimationTimer _timer;
+    AnimationTimer _timer{_spec.isLooping};
     std::unique_ptr<AnimationTrigger> _trigger;
 
     std::array<T, 2> _keyframes;
