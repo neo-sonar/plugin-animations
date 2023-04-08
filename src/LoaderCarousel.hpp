@@ -14,6 +14,8 @@ inline constexpr auto makeSquare = []<typename T>(juce::Rectangle<T> const& rect
 template<int NumPoints>
 struct LoaderCarousel final : juce::Component
 {
+    static_assert(NumPoints >= 3);
+
     LoaderCarousel()
         : _scale1{makeAnimationSpec(), 1.0F, 0.0F}
         , _translate2{makeAnimationSpec(), 0.0F, 24.0F}
@@ -28,34 +30,24 @@ struct LoaderCarousel final : juce::Component
 
     auto paint(juce::Graphics& g) -> void override
     {
-        auto e1 = _ellipses[0];
-        auto e2 = _ellipses[1];
-        auto e3 = _ellipses[2];
+        auto points = std::span<juce::Rectangle<float>>{_points}.subspan(0, NumPoints - 1);
 
         g.setColour(juce::Colours::white);
-        g.fillEllipse(e1.reduced(e1.proportionOfWidth(0.5F) * _scale1.get()));
-
-        g.fillEllipse(e1.translated(_translate2.get(), 0.0F));
-        g.fillEllipse(e2.translated(_translate2.get(), 0.0F));
-
-        g.fillEllipse(e3.reduced(e3.proportionOfWidth(0.5F) * _scale3.get()));
+        g.fillEllipse(points.front().reduced(points.front().proportionOfWidth(0.5F) * _scale1.get()));
+        for (auto const& p : points) { g.fillEllipse(p.translated(_translate2.get(), 0.0F)); }
+        g.fillEllipse(_points.back().reduced(_points.back().proportionOfWidth(0.5F) * _scale3.get()));
     }
 
     auto resized() -> void override
     {
 
         auto area        = getLocalBounds().toFloat();
-        auto const width = area.getWidth() / 3.0F;
-
-        _ellipses = {
-            makeSquare(area.removeFromLeft(width)).reduced(2.0F),
-            makeSquare(area.removeFromLeft(width)).reduced(2.0F),
-            makeSquare(area).reduced(2.0F),
-        };
+        auto const width = area.getWidth() / static_cast<float>(_points.size());
+        for (auto& p : _points) { p = makeSquare(area.removeFromLeft(width)).reduced(2.0F); }
 
         _translate2.keyframes(
             0.0F,
-            _ellipses.back().getCentreX() - std::prev(_ellipses.end(), 2)->getCentreX()
+            _points.back().getCentreX() - std::prev(_points.end(), 2)->getCentreX()
         );
     }
 
@@ -74,7 +66,7 @@ private:
     AnimatedProperty<float> _translate2;
     AnimatedProperty<float> _scale3;
 
-    std::array<juce::Rectangle<float>, NumPoints> _ellipses{};
+    std::array<juce::Rectangle<float>, NumPoints> _points{};
 };
 
 }  // namespace mc

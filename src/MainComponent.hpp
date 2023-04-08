@@ -61,7 +61,11 @@ struct WidgetsExamples final : juce::Component
 
 private:
     mc::AnimatedButton _play{"Play"};
-    mc::LoaderCarousel<3> _loader{};
+    mc::LoaderCarousel<3> _loader3{};
+    mc::LoaderCarousel<4> _loader4{};
+    mc::LoaderCarousel<5> _loader5{};
+    mc::LoaderCarousel<6> _loader6{};
+    mc::LoaderCarousel<7> _loader7{};
 };
 }  // namespace mc
 
