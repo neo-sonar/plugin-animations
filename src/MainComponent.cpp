@@ -22,39 +22,13 @@ auto addFittedText(
     );
 }
 
-MainComponent::MainComponent()
+namespace mc {
+PathExamples::PathExamples() { _trim.trigger(); }
+
+auto PathExamples::paint(juce::Graphics& g) -> void
 {
-    _transition.addItemList(
-        {
-            "Linear",
-            "Ease-Out",
-            "Ease-In-Out",
-            "Ease-In-Out-Back",
-        },
-        1
-    );
-
-    _duration.onValueChange
-        = [this] { _trim.duration(mc::Milliseconds<int>{static_cast<int>(_duration.getValue())}); };
-    _duration.setRange(100.0, 10000.0, 1.0);
-    _duration.setValue(2000.0);
-
-    addAndMakeVisible(_play);
-    addAndMakeVisible(_loader);
-    addAndMakeVisible(_transition);
-    addAndMakeVisible(_duration);
-    setSize(600, 400);
-
-    _trim.trigger();
-}
-
-auto MainComponent::paint(juce::Graphics& g) -> void
-{
-    // WINDOW
-    g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
-
     // CANVAS
-    auto canvas = _canvas.toFloat();
+    auto canvas = getLocalBounds().toFloat();
     g.setColour(juce::Colours::black);
     g.fillRect(canvas);
 
@@ -74,15 +48,122 @@ auto MainComponent::paint(juce::Graphics& g) -> void
     g.strokePath(mc::TrimPathEffect{0.0, _trim.get()}(submit), juce::PathStrokeType{3.0F});
 }
 
+TransitionExamples::TransitionExamples()
+{
+    addAndMakeVisible(_transition);
+    addAndMakeVisible(_duration);
+    _transition.addItemList(
+        {
+            "Linear",
+            "Ease-Out",
+            "Ease-In-Out",
+            "Ease-In-Out-Back",
+        },
+        1
+    );
+
+    _duration.onValueChange = [this] {
+        auto const ms = mc::Milliseconds<int>{static_cast<int>(_duration.getValue())};
+        _trim.duration(ms);
+    };
+    _duration.setRange(100.0, 10000.0, 1.0);
+    _duration.setValue(2000.0);
+}
+
+auto TransitionExamples::paint(juce::Graphics& g) -> void
+{
+    g.setColour(juce::Colours::black);
+    g.fillRect(_canvas);
+}
+
+auto TransitionExamples::resized() -> void
+{
+    using namespace juce;
+    using Track = juce::Grid::TrackInfo;
+
+    auto proxy           = juce::Component{"proxy"};
+    auto grid            = juce::Grid{};
+    grid.autoFlow        = Grid::AutoFlow::row;
+    grid.templateColumns = {Track{1_fr}};
+    grid.templateRows    = {Track{1_fr}, Track{1_fr}, Track{5_fr}};
+    grid.autoRows        = Track{1_fr};
+    grid.autoColumns     = Track{1_fr};
+    grid.rowGap          = 4_px;
+    grid.columnGap       = 4_px;
+    grid.items           = {GridItem{_transition}, GridItem{_duration}, GridItem{proxy}};
+
+    grid.performLayout(getLocalBounds().reduced(8));
+    _canvas = proxy.getBounds().toFloat();
+}
+
+WidgetsExamples::WidgetsExamples()
+{
+    addAndMakeVisible(_play);
+    addAndMakeVisible(_loader);
+}
+
+auto WidgetsExamples::paint(juce::Graphics& g) -> void { g.fillAll(juce::Colours::black); }
+
+auto WidgetsExamples::resized() -> void
+{
+    using namespace juce;
+    using Track = juce::Grid::TrackInfo;
+
+    auto grid            = juce::Grid{};
+    grid.autoFlow        = Grid::AutoFlow::row;
+    grid.templateColumns = {Track{1_fr}, Track{1_fr}, Track{1_fr}};
+    grid.templateRows    = {Track{1_fr}, Track{1_fr}, Track{1_fr}};
+    grid.autoRows        = Track{1_fr};
+    grid.autoColumns     = Track{1_fr};
+    grid.rowGap          = 4_px;
+    grid.columnGap       = 4_px;
+    grid.items           = {GridItem{_play}, GridItem{_loader}};
+
+    grid.performLayout(getLocalBounds().reduced(8));
+}
+
+}  // namespace mc
+
+MainComponent::MainComponent()
+{
+    addAndMakeVisible(_pathToggle);
+    addAndMakeVisible(_transitionToggle);
+    addAndMakeVisible(_widgetsToggle);
+    addAndMakeVisible(_path);
+    addAndMakeVisible(_transition);
+    addAndMakeVisible(_widgets);
+
+    _tabs.addTab({&_pathToggle, &_path});
+    _tabs.addTab({&_transitionToggle, &_transition});
+    _tabs.addTab({&_widgetsToggle, &_widgets});
+    _tabs.selectFirstTab();
+
+    setSize(600, 400);
+}
+
+auto MainComponent::paint(juce::Graphics& g) -> void
+{
+    g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
+}
+
 auto MainComponent::resized() -> void
 {
-    auto area        = getLocalBounds();
-    auto controls    = area.removeFromTop(area.proportionOfHeight(0.1));
-    auto const width = controls.proportionOfWidth(0.25);
-    _play.setBounds(controls.removeFromLeft(width).reduced(4));
-    _loader.setBounds(controls.removeFromLeft(width).reduced(4));
-    _transition.setBounds(controls.removeFromLeft(width).reduced(4));
-    _duration.setBounds(controls.reduced(4));
+    auto area     = getLocalBounds();
+    auto controls = area.removeFromTop(area.proportionOfHeight(0.1));
 
-    _canvas = area.reduced(4);
+    using namespace juce;
+    using Track = juce::Grid::TrackInfo;
+
+    auto grid            = juce::Grid{};
+    grid.autoFlow        = Grid::AutoFlow::row;
+    grid.templateColumns = {Track{1_fr}, Track{1_fr}, Track{1_fr}};
+    grid.templateRows    = {Track{1_fr}};
+    grid.autoRows        = Track{1_fr};
+    grid.autoColumns     = Track{1_fr};
+    grid.rowGap          = 4_px;
+    grid.columnGap       = 4_px;
+    grid.items = {GridItem{_pathToggle}, GridItem{_transitionToggle}, GridItem{_widgetsToggle}};
+    grid.performLayout(controls);
+
+    _tabs.setContentBounds(area.reduced(4));
 }

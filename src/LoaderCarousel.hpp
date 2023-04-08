@@ -2,6 +2,8 @@
 
 #include "AnimatedButton.hpp"
 
+#include <span>
+
 namespace mc {
 
 inline constexpr auto makeSquare = []<typename T>(juce::Rectangle<T> const& rect) {
@@ -9,6 +11,7 @@ inline constexpr auto makeSquare = []<typename T>(juce::Rectangle<T> const& rect
     return rect.withSizeKeepingCentre(size, size);
 };
 
+template<int NumPoints>
 struct LoaderCarousel final : juce::Component
 {
     LoaderCarousel()
@@ -50,7 +53,10 @@ struct LoaderCarousel final : juce::Component
             makeSquare(area).reduced(2.0F),
         };
 
-        _translate2.keyframes(0.0F, _ellipses[2].getCentreX() - _ellipses[1].getCentreX());
+        _translate2.keyframes(
+            0.0F,
+            _ellipses.back().getCentreX() - std::prev(_ellipses.end(), 2)->getCentreX()
+        );
     }
 
 private:
@@ -68,7 +74,7 @@ private:
     AnimatedProperty<float> _translate2;
     AnimatedProperty<float> _scale3;
 
-    std::array<juce::Rectangle<float>, 3> _ellipses{};
+    std::array<juce::Rectangle<float>, NumPoints> _ellipses{};
 };
 
 }  // namespace mc

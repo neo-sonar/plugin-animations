@@ -35,6 +35,8 @@ target_sources(AnimationDemo
         "src/Main.cpp"
         "src/MainComponent.hpp"
         "src/MainComponent.cpp"
+        "src/TabSelector.hpp"
+        "src/TabSelector.cpp"
         "src/Time.hpp"
         "src/TrimPathEffect.hpp"
         "src/TrimPathEffect.cpp"
