@@ -5,10 +5,7 @@ struct Application final : juce::JUCEApplication
     Application()           = default;
     ~Application() override = default;
 
-    auto getApplicationName() -> juce::String const override
-    {
-        return JUCE_APPLICATION_NAME_STRING;
-    }
+    auto getApplicationName() -> juce::String const override { return JUCE_APPLICATION_NAME_STRING; }
 
     auto getApplicationVersion() -> juce::String const override
     {

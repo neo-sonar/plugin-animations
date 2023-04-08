@@ -35,6 +35,9 @@ target_sources(AnimationDemo
         "src/Main.cpp"
         "src/MainComponent.hpp"
         "src/MainComponent.cpp"
+        "src/Time.hpp"
+        "src/TrimPathEffect.hpp"
+        "src/TrimPathEffect.cpp"
 )
 
 target_compile_definitions(AnimationDemo

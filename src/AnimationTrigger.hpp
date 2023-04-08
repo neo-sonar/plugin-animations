@@ -36,10 +36,7 @@ struct AnimationTriggers
     private:
         auto mouseEnter(juce::MouseEvent const& /*event*/) -> void override { triggerUp(); }
 
-        auto mouseExit(juce::MouseEvent const& /*event*/) -> void override
-        {
-            triggerDown();
-        }
+        auto mouseExit(juce::MouseEvent const& /*event*/) -> void override { triggerDown(); }
 
         juce::Component* _component;
     };
@@ -51,15 +48,11 @@ enum struct AnimationTriggerType
     Hover,
 };
 
-[[nodiscard]] inline auto makeAnimationTrigger(
-    AnimationTriggerType type,
-    AnimationTimer& timer,
-    juce::Component* parent
-) -> std::unique_ptr<AnimationTrigger>
+[[nodiscard]] inline auto
+makeAnimationTrigger(AnimationTriggerType type, AnimationTimer& timer, juce::Component* parent)
+    -> std::unique_ptr<AnimationTrigger>
 {
-    if (type == AnimationTriggerType::Manual) {
-        return std::make_unique<AnimationTrigger>(timer);
-    }
+    if (type == AnimationTriggerType::Manual) { return std::make_unique<AnimationTrigger>(timer); }
     if (type == AnimationTriggerType::Hover) {
         return std::make_unique<AnimationTriggers::Hover>(timer, parent);
     }

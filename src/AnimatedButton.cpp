@@ -16,8 +16,7 @@ AnimatedButton::AnimatedButton(juce::String const& name) : Button{name}
     _text.duration(Milliseconds<int>{600});
 }
 
-auto AnimatedButton::paintButton(juce::Graphics& g, bool /*isHighlighted*/, bool /*isDown*/)
-    -> void
+auto AnimatedButton::paintButton(juce::Graphics& g, bool /*isHighlighted*/, bool /*isDown*/) -> void
 {
     auto const area = _margin.get();
 
@@ -31,10 +30,7 @@ auto AnimatedButton::paintButton(juce::Graphics& g, bool /*isHighlighted*/, bool
 
 auto AnimatedButton::resized() -> void
 {
-    _margin.keyframes(
-        getLocalBounds().toFloat(),
-        getLocalBounds().reduced(16, 4).toFloat()
-    );
+    _margin.keyframes(getLocalBounds().toFloat(), getLocalBounds().reduced(16, 4).toFloat());
 }
 
 }  // namespace mc

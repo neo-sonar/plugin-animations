@@ -1,12 +1,29 @@
 #include "MainComponent.hpp"
 
+#include "TrimPathEffect.hpp"
+
+auto addFittedText(
+    juce::GlyphArrangement& glyphs,
+    juce::Font const& font,
+    juce::String const& text,
+    juce::Rectangle<float> area,
+    juce::Justification justification
+)
+{
+    glyphs.addFittedText(
+        font,
+        text,
+        area.getX(),
+        area.getY(),
+        area.getWidth(),
+        area.getHeight(),
+        justification,
+        1
+    );
+}
+
 MainComponent::MainComponent()
 {
-    _play.onClick = [this] {
-        _startTime = juce::Time::getCurrentTime();
-        startTimerHz(60);
-    };
-
     _transition.addItemList(
         {
             "Linear",
@@ -17,56 +34,44 @@ MainComponent::MainComponent()
         1
     );
 
-    _duration.onValueChange = [this] {
-        // auto const ms = juce::roundToInt(_duration.getValue());
-        // _play.transitionTime(ms);
-    };
-    _duration.setRange(100.0, 2'000.0, 1.0);
-    _duration.setValue(1'000.0);
+    _duration.onValueChange
+        = [this] { _trim.duration(mc::Milliseconds<int>{static_cast<int>(_duration.getValue())}); };
+    _duration.setRange(100.0, 10000.0, 1.0);
+    _duration.setValue(2000.0);
 
     addAndMakeVisible(_play);
     addAndMakeVisible(_loader);
     addAndMakeVisible(_transition);
     addAndMakeVisible(_duration);
     setSize(600, 400);
+
+    _trim.trigger();
 }
 
 auto MainComponent::paint(juce::Graphics& g) -> void
 {
-
+    // WINDOW
     g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
 
+    // CANVAS
+    auto canvas = _canvas.toFloat();
     g.setColour(juce::Colours::black);
-    g.fillRect(_canvas);
+    g.fillRect(canvas);
 
-    auto const maxTimeMs = static_cast<juce::int64>(_duration.getValue());
-    auto const maxTime   = juce::RelativeTime::milliseconds(maxTimeMs);
-
-    auto const now = juce::Time::getCurrentTime();
-    auto delta     = now - _startTime;
-
-    if (delta > maxTime) {
-        delta = maxTime;
-        stopTimer();
-    }
-
-    auto const ts = static_cast<float>(delta.inMilliseconds())
-                  / static_cast<float>(maxTime.inMilliseconds());
-
-    auto const canvas = _canvas.toFloat();
-    auto const ball   = juce::Rectangle{0, 0, 40, 40}
-                          .toFloat()
-                          .withPosition(canvas.getTopLeft())
-                          .translated(0.0F, 30.0F);
-
-    auto const startX = canvas.getTopLeft().x + 75.0F;
-    auto const endX   = canvas.getBottomRight().x - 75.0F;
-
-    auto const transition = mc::makeTransition(_transition.getSelectedId(), ts);
-    auto const x          = juce::jmap(transition.y, startX, endX);
-
+    // STAR
+    auto starArea = canvas.removeFromLeft(canvas.proportionOfWidth(0.5));
+    auto star     = juce::Path{};
+    star.addStar(starArea.getCentre(), 24, 16.0F, 32.0F);
+    star.applyTransform(star.getTransformToScaleToFit(starArea.reduced(8.0F), true));
     g.setColour(juce::Colours::red);
-    g.fillRoundedRectangle(ball.withX(x), 4.0F);
+    g.strokePath(mc::TrimPathEffect{_trim.get()}(star), juce::PathStrokeType{2.0F});
+
+    // TEXT
+    auto glyphs = juce::GlyphArrangement{};
+    addFittedText(glyphs, juce::Font{54.0F}, "Submit", canvas, juce::Justification::centred);
+    auto submit = juce::Path{};
+    glyphs.createPath(submit);
+    g.strokePath(mc::TrimPathEffect{0.0, _trim.get()}(submit), juce::PathStrokeType{3.0F});
 }
 
 auto MainComponent::resized() -> void
@@ -81,5 +86,3 @@ auto MainComponent::resized() -> void
 
     _canvas = area.reduced(4);
 }
-
-auto MainComponent::timerCallback() -> void { repaint(); }
