@@ -46,4 +46,22 @@ struct AnimationTriggers
     };
 };
 
+enum struct AnimationTriggerType
+{
+    Hover,
+};
+
+[[nodiscard]] inline auto makeAnimationTrigger(
+    AnimationTriggerType type,
+    AnimationTimer& timer,
+    juce::Component* parent
+) -> std::unique_ptr<AnimationTrigger>
+{
+    if (type == AnimationTriggerType::Hover) {
+        return std::make_unique<AnimationTriggers::Hover>(timer, parent);
+    }
+    jassertfalse;
+    return {};
+}
+
 }  // namespace mc

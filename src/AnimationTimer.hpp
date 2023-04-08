@@ -10,7 +10,7 @@ struct AnimationTimer final : juce::Timer
     AnimationTimer()           = default;
     ~AnimationTimer() override = default;
 
-    auto duration(double ms) -> void { _duration = ms; }
+    auto duration(Milliseconds<int> ms) -> void { _duration = ms; }
 
     [[nodiscard]] auto position() const -> double { return _position; }
 
@@ -27,16 +27,14 @@ struct AnimationTimer final : juce::Timer
 private:
     auto timerCallback() -> void override
     {
-        auto const maxTime = Milliseconds<int>{static_cast<int>(_duration)};
-        auto delta         = SystemClock::now() - _startTime;
-
-        if (delta > maxTime) {
-            delta = maxTime;
+        auto delta = SystemClock::now() - _startTime;
+        if (delta > _duration) {
+            delta = _duration;
             stopTimer();
         }
 
         _position = std::chrono::duration_cast<Milliseconds<double>>(delta)
-                  / std::chrono::duration_cast<Milliseconds<double>>(maxTime);
+                  / std::chrono::duration_cast<Milliseconds<double>>(_duration);
 
         if (!_forward) { _position = 1.0 - _position; }
         if (onTick) { onTick(); }
@@ -44,7 +42,7 @@ private:
 
     bool _forward{true};
     double _position{0.0};
-    double _duration{1000};
+    Milliseconds<int> _duration{1000};
     SystemClock::time_point _startTime{};
 };
 
