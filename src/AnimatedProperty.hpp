@@ -3,6 +3,7 @@
 #include "AnimationTimer.hpp"
 #include "AnimationTrigger.hpp"
 #include "CubicInterpolation.hpp"
+
 #include <juce_gui_basics/juce_gui_basics.h>
 
 namespace mc {
@@ -49,6 +50,7 @@ struct AnimationSpec
     AnimationTriggerType trigger{AnimationTriggerType::Hover};
     Milliseconds<int> transitionTime{600};
     bool isLooping{false};
+    std::function<double(double)> ease{[](double t) { return t; }};
 };
 
 template<typename T>
@@ -84,7 +86,7 @@ struct AnimatedProperty
         return AnimatedPropertyInterpolator<T>::interpolate(
             _keyframes.front(),
             _keyframes.back(),
-            _timer.position()
+            _spec.ease(_timer.position())
         );
     }
 

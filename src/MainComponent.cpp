@@ -133,6 +133,43 @@ auto WidgetsExamples::resized() -> void
     grid.performLayout(getLocalBounds().reduced(8));
 }
 
+BannerExamples::BannerExamples()
+{
+    _prev.onClick  = [this] { _banners.prev(); };
+    _reset.onClick = [this] { _banners.reset(); };
+    _next.onClick  = [this] { _banners.next(); };
+
+    addAndMakeVisible(_prev);
+    addAndMakeVisible(_reset);
+    addAndMakeVisible(_next);
+    addAndMakeVisible(_banners);
+}
+
+auto BannerExamples::paint(juce::Graphics& g) -> void { g.fillAll(juce::Colours::black); }
+
+auto BannerExamples::resized() -> void
+{
+    using namespace juce;
+    using Track = juce::Grid::TrackInfo;
+
+    auto grid            = juce::Grid{};
+    grid.autoFlow        = Grid::AutoFlow::column;
+    grid.templateColumns = {Track{1_fr}, Track{1_fr}, Track{1_fr}};
+    grid.templateRows    = {Track{5_fr}, Track{1_fr}};
+    grid.autoRows        = Track{1_fr};
+    grid.autoColumns     = Track{1_fr};
+    grid.rowGap          = 16_px;
+    grid.columnGap       = 16_px;
+    grid.items           = {
+        GridItem{_banners}.withArea({}, GridItem::Span(3)),
+        GridItem{_prev},
+        GridItem{_reset},
+        GridItem{_next},
+    };
+
+    grid.performLayout(getLocalBounds().reduced(32));
+}
+
 }  // namespace mc
 
 MainComponent::MainComponent()
@@ -140,13 +177,16 @@ MainComponent::MainComponent()
     addAndMakeVisible(_pathToggle);
     addAndMakeVisible(_transitionToggle);
     addAndMakeVisible(_widgetsToggle);
+    addAndMakeVisible(_bannersToggle);
     addAndMakeVisible(_path);
     addAndMakeVisible(_transition);
     addAndMakeVisible(_widgets);
+    addAndMakeVisible(_banners);
 
     _tabs.addTab({&_pathToggle, &_path});
     _tabs.addTab({&_transitionToggle, &_transition});
     _tabs.addTab({&_widgetsToggle, &_widgets});
+    _tabs.addTab({&_bannersToggle, &_banners});
     _tabs.selectFirstTab();
 
     setSize(600, 400);
@@ -167,13 +207,18 @@ auto MainComponent::resized() -> void
 
     auto grid            = juce::Grid{};
     grid.autoFlow        = Grid::AutoFlow::row;
-    grid.templateColumns = {Track{1_fr}, Track{1_fr}, Track{1_fr}};
+    grid.templateColumns = {Track{1_fr}, Track{1_fr}, Track{1_fr}, Track{1_fr}};
     grid.templateRows    = {Track{1_fr}};
     grid.autoRows        = Track{1_fr};
     grid.autoColumns     = Track{1_fr};
     grid.rowGap          = 4_px;
     grid.columnGap       = 4_px;
-    grid.items = {GridItem{_pathToggle}, GridItem{_transitionToggle}, GridItem{_widgetsToggle}};
+    grid.items           = {
+        GridItem{_pathToggle},
+        GridItem{_transitionToggle},
+        GridItem{_widgetsToggle},
+        GridItem{_bannersToggle},
+    };
     grid.performLayout(controls);
 
     _tabs.setContentBounds(area.reduced(4));

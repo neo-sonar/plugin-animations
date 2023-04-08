@@ -31,6 +31,7 @@ target_sources(AnimationDemo
         "src/AnimatedButton.hpp"
         "src/AnimatedProperty.hpp"
         "src/AnimationTimer.hpp"
+        "src/BannerCarousel.hpp"
         "src/CubicInterpolation.hpp"
         "src/Main.cpp"
         "src/MainComponent.hpp"
