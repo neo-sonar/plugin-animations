@@ -1,11 +1,15 @@
 #pragma once
 
+#include <concepts>
 #include <juce_graphics/juce_graphics.h>
 
 namespace mc {
 
 template<typename T>
-struct TransitionTraits
+struct TransitionTraits;
+
+template<std::floating_point T>
+struct TransitionTraits<T>
 {
     [[nodiscard]] static constexpr auto interpolate(T a, T b, double t) -> T
     {

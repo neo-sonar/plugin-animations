@@ -45,7 +45,8 @@ struct Transition
         _timer.delay(ms);
     }
 
-    template<int I>
+
+    template<std::size_t I>
     auto keyframes(auto const& a, auto const& b)
     {
         std::get<I>(_props).keyframes(a, b);
@@ -55,7 +56,7 @@ struct Transition
 
     auto backward() { _timer.play(AnimationDirection::reverse); }
 
-    template<int I>
+    template<std::size_t I>
     [[nodiscard]] auto get() const
     {
         return std::get<I>(_props).get(_spec.timingFunction(_timer.position()));
