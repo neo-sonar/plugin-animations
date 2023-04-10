@@ -45,19 +45,19 @@ private:
         {
             _current = _next;
             std::rotate(_next.begin(), std::next(_next.begin()), _next.end());
-            _move.trigger();
+            _move.forward();
         }
 
         auto next() -> void
         {
             _current = _next;
             std::rotate(_next.rbegin(), std::next(_next.rbegin()), _next.rend());
-            _move.trigger();
+            _move.forward();
         }
 
         auto paint(juce::Graphics& g) -> void override
         {
-            using Interpolator = AnimatedPropertyInterpolator<juce::Rectangle<float>>;
+            using Interpolator = TransitionTraits<juce::Rectangle<float>>;
 
             auto const t = _move.get();
             g.setColour(juce::Colours::transparentBlack);
@@ -110,19 +110,18 @@ private:
         }
 
     private:
-        auto makeTransition() -> Transition
+        auto makeTransition() -> TransitionSpec
         {
-
             return {
-                .parent    = this,
-                .trigger   = AnimationTriggerType::Manual,
-                .duration  = Milliseconds<int>{800},
-                .isLooping = false,
-                .ease      = EaseInOutBack,
+                .parent         = this,
+                .duration       = std::chrono::milliseconds{600},
+                .delay          = std::chrono::milliseconds{0},
+                .isLooping      = false,
+                .timingFunction = EaseInOutBack,
             };
         }
 
-        AnimatedProperty<float> _move;
+        Transition<float> _move;
         std::array<juce::Rectangle<float>, 5> _current;
         std::array<juce::Rectangle<float>, 5> _next;
     };

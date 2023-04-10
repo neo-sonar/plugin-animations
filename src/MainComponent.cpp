@@ -23,7 +23,7 @@ auto addFittedText(
 }
 
 namespace mc {
-PathExamples::PathExamples() { _trim.trigger(); }
+PathExamples::PathExamples() { _trim.forward(); }
 
 auto PathExamples::paint(juce::Graphics& g) -> void
 {
@@ -63,7 +63,7 @@ TransitionExamples::TransitionExamples()
     );
 
     _duration.onValueChange = [this] {
-        auto const ms = mc::Milliseconds<int>{static_cast<int>(_duration.getValue())};
+        auto const ms = std::chrono::milliseconds{static_cast<int>(_duration.getValue())};
         _trim.duration(ms);
     };
     _duration.setRange(100.0, 10000.0, 1.0);

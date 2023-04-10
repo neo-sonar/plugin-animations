@@ -21,9 +21,9 @@ struct LoaderCarousel final : juce::Component
         , _translate2{makeTransition(), 0.0F, 24.0F}
         , _scale3{makeTransition(), 0.0F, 1.0F}
     {
-        _scale1.trigger();
-        _translate2.trigger();
-        _scale3.trigger();
+        _scale1.forward();
+        _translate2.forward();
+        _scale3.forward();
     }
 
     ~LoaderCarousel() override = default;
@@ -52,20 +52,19 @@ struct LoaderCarousel final : juce::Component
     }
 
 private:
-    auto makeTransition() -> Transition
+    auto makeTransition() -> TransitionSpec
     {
         return {
-            .parent    = this,
-            .trigger   = AnimationTriggerType::Manual,
-            .duration  = Milliseconds<int>{600},
-            .isLooping = true,
-            .ease      = EaseInOutBack,
+            .parent         = this,
+            .duration       = std::chrono::milliseconds{600},
+            .isLooping      = true,
+            .timingFunction = EaseInOutBack,
         };
     }
 
-    AnimatedProperty<float> _scale1;
-    AnimatedProperty<float> _translate2;
-    AnimatedProperty<float> _scale3;
+    Transition<float> _scale1;
+    Transition<float> _translate2;
+    Transition<float> _scale3;
 
     std::array<juce::Rectangle<float>, NumPoints> _points{};
 };

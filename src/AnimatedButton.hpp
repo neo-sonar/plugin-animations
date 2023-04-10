@@ -1,6 +1,8 @@
 #pragma once
 
-#include "AnimatedProperty.hpp"
+#include "MouseHoverListener.hpp"
+#include "Transition.hpp"
+
 #include <juce_gui_extra/juce_gui_extra.h>
 
 namespace mc {
@@ -13,10 +15,12 @@ struct AnimatedButton final : juce::Button
     auto resized() -> void override;
 
 private:
-    AnimatedProperty<juce::Rectangle<float>> _margin{{.parent = this}, {}, {}};
-    AnimatedProperty<float> _corner{{.parent = this}, {}, {}};
-    AnimatedProperty<float> _font{{.parent = this}, {}, {}};
-    AnimatedColor _background{{.parent = this}, {}, {}};
-    AnimatedColor _text{{.parent = this}, {}, {}};
+    Transition<juce::Rectangle<float>> _margin{{.parent = this}, {}, {}};
+    Transition<float> _corner{{.parent = this}, {}, {}};
+    Transition<float> _font{{.parent = this}, {}, {}};
+    Transition<juce::Colour> _background{{.parent = this}, {}, {}};
+    Transition<juce::Colour> _text{{.parent = this}, {}, {}};
+
+    MouseHoverListener _hoverListener{this};
 };
 }  // namespace mc
