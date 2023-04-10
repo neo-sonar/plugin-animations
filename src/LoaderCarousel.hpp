@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AnimatedButton.hpp"
+#include "Animation.hpp"
 
 #include <span>
 
@@ -18,42 +19,49 @@ struct LoaderCarousel final : juce::Component
 
     LoaderCarousel()
     {
-        _scale1.keyframes(1.0F, 0.0F);
-        _translate2.keyframes(0.0F, 24.0F);
-        _scale3.keyframes(0.0F, 1.0F);
-
-        _scale1.forward();
-        _translate2.forward();
-        _scale3.forward();
+        _transition.keyframes<ScaleIndex>(1.0F, 0.0F);
+        _transition.keyframes<TranslateIndex>(0.0F, 24.0F);
+        _transition.forward();
     }
 
     ~LoaderCarousel() override = default;
 
     auto paint(juce::Graphics& g) -> void override
     {
-        auto points = std::span<juce::Rectangle<float>>{_points}.subspan(0, NumPoints - 1);
+        auto const scale     = _transition.get<ScaleIndex>();
+        auto const translate = _transition.get<TranslateIndex>();
+        auto const width     = _points.front().proportionOfWidth(0.5F);
 
         g.setColour(juce::Colours::white);
-        g.fillEllipse(points.front().reduced(points.front().proportionOfWidth(0.5F) * _scale1.get()));
-        for (auto const& p : points) { g.fillEllipse(p.translated(_translate2.get(), 0.0F)); }
-        g.fillEllipse(_points.back().reduced(_points.back().proportionOfWidth(0.5F) * _scale3.get()));
+
+        g.fillEllipse(_points.front().reduced(width * scale));
+        g.fillEllipse(_points.back().reduced(width * (1.0F - scale)));
+
+        for (auto const& p : std::span<juce::Rectangle<float>>{_points}.subspan(0, NumPoints - 1)) {
+            g.fillEllipse(p.translated(translate, 0.0F));
+        }
     }
 
     auto resized() -> void override
     {
-
         auto area        = getLocalBounds().toFloat();
         auto const width = area.getWidth() / static_cast<float>(_points.size());
         for (auto& p : _points) { p = makeSquare(area.removeFromLeft(width)).reduced(2.0F); }
 
-        _translate2.keyframes(
-            0.0F,
-            _points.back().getCentreX() - std::prev(_points.end(), 2)->getCentreX()
-        );
+        auto const last       = _points.back();
+        auto const beforeLast = std::prev(_points.end(), 2);
+        auto const distance   = last.getCentreX() - beforeLast->getCentreX();
+        _transition.keyframes<TranslateIndex>(0.0F, distance);
     }
 
 private:
-    static auto makeTransition() -> TransitionSpec
+    enum Index
+    {
+        ScaleIndex,
+        TranslateIndex,
+    };
+
+    static auto makeAnimation() -> AnimationSpec
     {
         return {
             .duration       = std::chrono::milliseconds{600},
@@ -62,11 +70,8 @@ private:
         };
     }
 
-    Transition<float> _scale1{this, makeTransition()};
-    Transition<float> _translate2{this, makeTransition()};
-    Transition<float> _scale3{this, makeTransition()};
-
     std::array<juce::Rectangle<float>, NumPoints> _points{};
+    Animation<float, float> _transition{this, makeAnimation()};
 };
 
 }  // namespace mc

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AnimatedButton.hpp"
+#include "Animation.hpp"
 #include "BannerCarousel.hpp"
 #include "LoaderCarousel.hpp"
 #include "TabSelector.hpp"
@@ -14,7 +15,7 @@ struct PathExamples final : juce::Component
     auto paint(juce::Graphics& g) -> void override;
 
 private:
-    [[nodiscard]] static auto makeTransition() -> TransitionSpec
+    [[nodiscard]] static auto makeAnimation() -> AnimationSpec
     {
         return {
             .duration  = std::chrono::milliseconds{2000},
@@ -22,7 +23,7 @@ private:
         };
     }
 
-    Transition<float> _trim{this, makeTransition()};
+    Animation<float> _trim{this, makeAnimation()};
 };
 
 struct TransitionExamples final : juce::Component
@@ -36,10 +37,7 @@ struct TransitionExamples final : juce::Component
 private:
     [[nodiscard]] static auto makeTransition() -> TransitionSpec
     {
-        return {
-            .duration  = std::chrono::milliseconds{2000},
-            .isLooping = true,
-        };
+        return {.duration = std::chrono::milliseconds{2000}};
     }
 
     Transition<float> _trim{this, makeTransition()};

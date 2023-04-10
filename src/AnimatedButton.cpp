@@ -3,11 +3,10 @@
 namespace mc {
 AnimatedButton::AnimatedButton(juce::String const& name) : Button{name}
 {
-    _margin.keyframes({}, {});
-    _corner.keyframes(0.0F, 8.0F);
-    _font.keyframes(1.0F, 2.0F);
-    _background.keyframes(juce::Colours::white, juce::Colours::green);
-    _text.keyframes(juce::Colours::black, juce::Colours::white);
+    _corner.keyframes<0>(0.0F, 8.0F);
+    _font.keyframes<0>(1.0F, 2.0F);
+    _background.keyframes<0>(juce::Colours::white, juce::Colours::green);
+    _text.keyframes<0>(juce::Colours::black, juce::Colours::white);
 
     _font.duration(std::chrono::milliseconds{250});
     _margin.duration(std::chrono::milliseconds{400});
@@ -34,19 +33,19 @@ AnimatedButton::AnimatedButton(juce::String const& name) : Button{name}
 
 auto AnimatedButton::paintButton(juce::Graphics& g, bool /*isHighlighted*/, bool /*isDown*/) -> void
 {
-    auto const area = _margin.get();
+    auto const area = _margin.get<0>();
 
-    g.setColour(_background.get());
-    g.fillRoundedRectangle(area, _corner.get());
+    g.setColour(_background.get<0>());
+    g.fillRoundedRectangle(area, _corner.get<0>());
 
-    g.setFont(juce::Font{16.0F}.withHorizontalScale(_font.get()));
-    g.setColour(_text.get());
+    g.setFont(juce::Font{16.0F}.withHorizontalScale(_font.get<0>()));
+    g.setColour(_text.get<0>());
     g.drawText(getButtonText(), area, juce::Justification::centred);
 }
 
 auto AnimatedButton::resized() -> void
 {
-    _margin.keyframes(getLocalBounds().toFloat(), getLocalBounds().reduced(16, 4).toFloat());
+    _margin.keyframes<0>(getLocalBounds().toFloat(), getLocalBounds().reduced(16, 4).toFloat());
 }
 
 }  // namespace mc

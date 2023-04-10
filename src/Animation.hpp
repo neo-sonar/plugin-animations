@@ -8,17 +8,18 @@
 
 namespace mc {
 
-struct TransitionSpec
+struct AnimationSpec
 {
     std::chrono::milliseconds duration{600};
     std::chrono::milliseconds delay{0};
+    bool isLooping{false};
     std::function<double(double)> timingFunction{TimingFunction::Linear};
 };
 
 template<typename... Ts>
-struct Transition
+struct Animation
 {
-    explicit Transition(juce::Component* parent, TransitionSpec const& spec = {})
+    explicit Animation(juce::Component* parent, AnimationSpec const& spec = {})
         : _parent{parent}
         , _spec{spec}
     {
@@ -65,8 +66,8 @@ struct Transition
 
 private:
     juce::Component* _parent{nullptr};
-    TransitionSpec _spec;
-    TransitionTimer _timer{_parent, false};
+    AnimationSpec _spec;
+    TransitionTimer _timer{_parent, _spec.isLooping};
     std::tuple<TransitionProperty<Ts>...> _props;
 };
 

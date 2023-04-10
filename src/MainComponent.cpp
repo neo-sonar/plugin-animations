@@ -25,7 +25,7 @@ auto addFittedText(
 namespace mc {
 PathExamples::PathExamples()
 {
-    _trim.keyframes(0.0F, 1.0F);
+    _trim.keyframes<0>(0.0F, 1.0F);
     _trim.forward();
 }
 
@@ -42,14 +42,14 @@ auto PathExamples::paint(juce::Graphics& g) -> void
     star.addStar(starArea.getCentre(), 24, 16.0F, 32.0F);
     star.applyTransform(star.getTransformToScaleToFit(starArea.reduced(8.0F), true));
     g.setColour(juce::Colours::red);
-    g.strokePath(mc::TrimPathEffect{_trim.get()}(star), juce::PathStrokeType{2.0F});
+    g.strokePath(mc::TrimPathEffect{_trim.get<0>()}(star), juce::PathStrokeType{2.0F});
 
     // TEXT
     auto glyphs = juce::GlyphArrangement{};
     addFittedText(glyphs, juce::Font{54.0F}, "Submit", canvas, juce::Justification::centred);
     auto submit = juce::Path{};
     glyphs.createPath(submit);
-    g.strokePath(mc::TrimPathEffect{0.0, _trim.get()}(submit), juce::PathStrokeType{3.0F});
+    g.strokePath(mc::TrimPathEffect{0.0, _trim.get<0>()}(submit), juce::PathStrokeType{3.0F});
 }
 
 TransitionExamples::TransitionExamples()
@@ -66,7 +66,7 @@ TransitionExamples::TransitionExamples()
         1
     );
 
-    _trim.keyframes(0.0F, 1.0F);
+    _trim.keyframes<0>(0.0F, 1.0F);
 
     _duration.onValueChange = [this] {
         auto const ms = std::chrono::milliseconds{static_cast<int>(_duration.getValue())};

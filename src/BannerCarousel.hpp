@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AnimatedButton.hpp"
-#include "CubicInterpolation.hpp"
+#include "TimingFunction.hpp"
 
 namespace mc {
 
@@ -35,7 +35,7 @@ struct BannerCarousel final : juce::Component
 private:
     struct Content final : juce::Component
     {
-        Content() { _move.keyframes(0.0F, 1.0F); }
+        Content() { _move.keyframes<0>(0.0F, 1.0F); }
 
         ~Content() override = default;
 
@@ -59,7 +59,7 @@ private:
         {
             using Interpolator = TransitionTraits<juce::Rectangle<float>>;
 
-            auto const t = _move.get();
+            auto const t = _move.get<0>();
             g.setColour(juce::Colours::transparentBlack);
             g.fillRect(Interpolator::interpolate(_current[0], _next[0], t));
             g.setColour(juce::Colours::green);
@@ -115,7 +115,6 @@ private:
             return {
                 .duration       = std::chrono::milliseconds{600},
                 .delay          = std::chrono::milliseconds{0},
-                .isLooping      = false,
                 .timingFunction = TimingFunction::EaseInOutBack,
             };
         }
