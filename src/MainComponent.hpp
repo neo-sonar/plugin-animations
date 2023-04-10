@@ -77,6 +77,37 @@ private:
     juce::TextButton _next{"next"};
     mc::BannerCarousel _banners{};
 };
+
+struct GridExamples final : juce::Component
+{
+    GridExamples();
+    ~GridExamples() override = default;
+
+    auto layout() -> void;
+    auto resized() -> void override;
+
+private:
+    static auto makeAnimation() -> AnimationSpec
+    {
+        return {
+            .duration       = std::chrono::milliseconds{800},
+            .delay          = std::chrono::milliseconds{0},
+            .timingFunction = TimingFunction::EaseInOut,
+        };
+    }
+
+    Animation<float> _transition{this, makeAnimation()};
+    bool _isVertical{false};
+    std::array<juce::Rectangle<int>, 5> _current{};
+    std::array<juce::Rectangle<int>, 5> _next{};
+    std::array<Thumbnail, 5> _thumbnails{
+        Thumbnail{  "ONE", juce::Colours::yellow, juce::Colours::green},
+        Thumbnail{  "TWO", juce::Colours::yellow, juce::Colours::green},
+        Thumbnail{"THREE", juce::Colours::yellow, juce::Colours::green},
+        Thumbnail{ "FOUR", juce::Colours::yellow, juce::Colours::green},
+        Thumbnail{ "FIVE", juce::Colours::yellow, juce::Colours::green},
+    };
+};
 }  // namespace mc
 
 struct MainComponent final : juce::Component
@@ -92,11 +123,13 @@ private:
     juce::TextButton _transitionToggle{"transition"};
     juce::TextButton _widgetsToggle{"widgets"};
     juce::TextButton _bannersToggle{"banners"};
+    juce::TextButton _gridsToggle{"grids"};
 
     mc::PathExamples _path{};
     mc::TransitionExamples _transition{};
     mc::WidgetsExamples _widgets{};
     mc::BannerExamples _banners{};
+    mc::GridExamples _grids{};
 
     mc::TabSelector _tabs;
 };
