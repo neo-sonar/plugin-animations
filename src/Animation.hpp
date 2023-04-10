@@ -52,6 +52,12 @@ struct Animation
         std::get<I>(_props).keyframes(a, b);
     }
 
+    template<std::size_t I>
+    auto keyframes(auto const& frames)
+    {
+        std::get<I>(_props).keyframes(frames);
+    }
+
     auto play(AnimationDirection direction = AnimationDirection::normal) { _timer.play(direction); }
 
     template<std::size_t I>

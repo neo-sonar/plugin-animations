@@ -55,12 +55,12 @@ struct WidgetsExamples final : juce::Component
     auto resized() -> void override;
 
 private:
-    mc::AnimatedButton _play{"Play"};
-    mc::LoaderCarousel<3> _loader3{};
-    mc::LoaderCarousel<4> _loader4{};
-    mc::LoaderCarousel<5> _loader5{};
-    mc::LoaderCarousel<6> _loader6{};
-    mc::LoaderCarousel<7> _loader7{};
+    AnimatedButton _play{"Play"};
+    LoaderCarousel<3> _loader3{};
+    LoaderCarousel<4> _loader4{};
+    LoaderCarousel<5> _loader5{};
+    LoaderCarousel<6> _loader6{};
+    LoaderCarousel<7> _loader7{};
 };
 
 struct BannerExamples final : juce::Component
@@ -75,7 +75,7 @@ private:
     juce::TextButton _prev{"prev"};
     juce::TextButton _reset{"reset"};
     juce::TextButton _next{"next"};
-    mc::BannerCarousel _banners{};
+    BannerCarousel _banners{};
 };
 
 struct GridExamples final : juce::Component
@@ -90,7 +90,7 @@ private:
     static auto makeAnimation() -> AnimationSpec
     {
         return {
-            .duration       = std::chrono::milliseconds{800},
+            .duration       = std::chrono::milliseconds{600},
             .delay          = std::chrono::milliseconds{0},
             .timingFunction = TimingFunction::EaseInOut,
         };
@@ -102,12 +102,21 @@ private:
     std::array<juce::Rectangle<int>, 5> _next{};
     std::array<Thumbnail, 5> _thumbnails{
         Thumbnail{  "ONE", juce::Colours::yellow, juce::Colours::green},
-        Thumbnail{  "TWO", juce::Colours::yellow, juce::Colours::green},
-        Thumbnail{"THREE", juce::Colours::yellow, juce::Colours::green},
-        Thumbnail{ "FOUR", juce::Colours::yellow, juce::Colours::green},
-        Thumbnail{ "FIVE", juce::Colours::yellow, juce::Colours::green},
+        Thumbnail{  "TWO",   juce::Colours::blue, juce::Colours::green},
+        Thumbnail{"THREE",    juce::Colours::red, juce::Colours::green},
+        Thumbnail{ "FOUR",  juce::Colours::white, juce::Colours::green},
+        Thumbnail{ "FIVE", juce::Colours::purple, juce::Colours::green},
     };
 };
+
+struct TabButton final : juce::Button
+{
+    explicit TabButton(juce::String const& name);
+    ~TabButton() override = default;
+
+    auto paintButton(juce::Graphics& g, bool isHighlighted, bool isDown) -> void override;
+};
+
 }  // namespace mc
 
 struct MainComponent final : juce::Component
@@ -119,11 +128,25 @@ struct MainComponent final : juce::Component
     auto resized() -> void override;
 
 private:
-    juce::TextButton _pathToggle{"path"};
-    juce::TextButton _transitionToggle{"transition"};
-    juce::TextButton _widgetsToggle{"widgets"};
-    juce::TextButton _bannersToggle{"banners"};
-    juce::TextButton _gridsToggle{"grids"};
+    static auto makeAnimation() -> mc::AnimationSpec
+    {
+        return {
+            .duration       = std::chrono::milliseconds{600},
+            .delay          = std::chrono::milliseconds{0},
+            .timingFunction = mc::TimingFunction::EaseInOut,
+        };
+    }
+
+    mc::Animation<juce::Rectangle<int>> _expand{this, makeAnimation()};
+
+    juce::Button* _prev{nullptr};
+    juce::Button* _next{nullptr};
+
+    mc::TabButton _pathToggle{"path"};
+    mc::TabButton _transitionToggle{"transition"};
+    mc::TabButton _widgetsToggle{"widgets"};
+    mc::TabButton _bannersToggle{"banners"};
+    mc::TabButton _gridsToggle{"grids"};
 
     mc::PathExamples _path{};
     mc::TransitionExamples _transition{};

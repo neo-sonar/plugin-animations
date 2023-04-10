@@ -18,7 +18,7 @@ struct Thumbnail final : juce::Component
     auto paint(juce::Graphics& g) -> void
     {
         g.setGradientFill(_gradient);
-        g.fillAll();
+        g.fillRoundedRectangle(getLocalBounds().toFloat(), 4.0F);
 
         g.setFont(32.0F);
         g.setColour(juce::Colours::black);
@@ -156,11 +156,11 @@ private:
         std::array<juce::Rectangle<int>, 5> _current;
         std::array<juce::Rectangle<int>, 5> _next;
         std::array<Thumbnail, 5> _thumbnails{
-            Thumbnail{  "ONE", juce::Colours::yellow, juce::Colours::green},
-            Thumbnail{  "TWO", juce::Colours::yellow, juce::Colours::green},
-            Thumbnail{"THREE", juce::Colours::yellow, juce::Colours::green},
-            Thumbnail{ "FOUR", juce::Colours::yellow, juce::Colours::green},
-            Thumbnail{ "FIVE", juce::Colours::yellow, juce::Colours::green},
+            Thumbnail{  "ONE", juce::Colours::transparentBlack, juce::Colours::transparentBlack},
+            Thumbnail{  "TWO",           juce::Colours::yellow,            juce::Colours::green},
+            Thumbnail{"THREE",           juce::Colours::yellow,            juce::Colours::green},
+            Thumbnail{ "FOUR",           juce::Colours::yellow,            juce::Colours::green},
+            Thumbnail{ "FIVE",           juce::Colours::yellow,            juce::Colours::green},
         };
     };
 

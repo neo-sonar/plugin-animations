@@ -2,8 +2,7 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
-namespace mc
-{
+namespace mc {
 
 struct TabSelectorItemSpec
 {
@@ -22,11 +21,14 @@ struct TabSelector final : juce::Button::Listener
     auto selectFirstTab() -> void;
     auto setContentBounds(juce::Rectangle<int> bounds) -> void;
 
+    std::function<void(ItemSpec const&, ItemSpec const&)> onTabSelect;
+
 private:
     auto buttonClicked(juce::Button* button) -> void override;
 
     int _radioGroupId{juce::Random::getSystemRandom().nextInt()};
     std::vector<ItemSpec> _items;
+    std::optional<ItemSpec> _selected;
 };
 
 }  // namespace mc

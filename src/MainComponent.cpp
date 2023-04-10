@@ -200,75 +200,66 @@ auto GridExamples::resized() -> void
     using namespace juce;
     using Track = juce::Grid::TrackInfo;
 
-    auto const isVertical = getWidth() > getHeight();
-    auto const rows       = juce::Array<Track>{Track{1_fr}};
-    auto const columns    = juce::Array<Track>{
-        Track{1_fr},
-        Track{1_fr},
-        Track{1_fr},
-        Track{1_fr},
-        Track{1_fr},
+    auto makeTracks = [](auto count) {
+        auto tracks = juce::Array<Track>{};
+        tracks.resize(count);
+        tracks.fill(Track{1_fr});
+        return tracks;
     };
 
-    auto proxies = std::array<juce::Component, 5>{};
+    auto grid        = juce::Grid{};
+    grid.autoFlow    = Grid::AutoFlow::row;
+    grid.autoRows    = Track{1_fr};
+    grid.autoColumns = Track{1_fr};
+    grid.rowGap      = 8_px;
+    grid.columnGap   = 8_px;
 
-    auto grid            = juce::Grid{};
-    grid.autoFlow        = Grid::AutoFlow::row;
-    grid.templateColumns = isVertical ? columns : rows;
-    grid.templateRows    = isVertical ? rows : columns;
-    grid.autoRows        = Track{1_fr};
-    grid.autoColumns     = Track{1_fr};
-    grid.rowGap          = 16_px;
-    grid.columnGap       = 16_px;
-    grid.items           = {
-        GridItem{proxies[0]},
-        GridItem{proxies[1]},
-        GridItem{proxies[2]},
-        GridItem{proxies[3]},
-        GridItem{proxies[4]},
-    };
+    auto proxies            = std::array<juce::Component, 5>{};
+    auto const isHorizontal = getWidth() > getHeight();
+
+    if (not isHorizontal) {
+        grid.templateColumns = makeTracks(1);
+        grid.templateRows    = makeTracks(5);
+        for (auto i{0U}; i < _thumbnails.size(); ++i) { grid.items.add(GridItem{proxies[i]}); }
+    } else {
+        grid.templateColumns = makeTracks(6);
+        grid.templateRows    = makeTracks(2);
+        grid.items           = {
+            GridItem{proxies[0]}.withArea({}, GridItem::Span(3)),
+            GridItem{proxies[1]}.withArea({}, GridItem::Span(3)),
+            GridItem{proxies[2]}.withArea({}, GridItem::Span(2)),
+            GridItem{proxies[3]}.withArea({}, GridItem::Span(2)),
+            GridItem{proxies[4]}.withArea({}, GridItem::Span(2)),
+        };
+    }
 
     grid.performLayout(getLocalBounds());
+    for (auto i{0U}; i < _thumbnails.size(); ++i) { _next[i] = proxies[i].getBounds(); }
 
-    if (_isVertical != isVertical) {
-        _isVertical = isVertical;
-
-        _current[0] = _thumbnails[0].getBounds();
-        _current[1] = _thumbnails[1].getBounds();
-        _current[2] = _thumbnails[2].getBounds();
-        _current[3] = _thumbnails[3].getBounds();
-        _current[4] = _thumbnails[4].getBounds();
-
-        _next[0] = proxies[0].getBounds();
-        _next[1] = proxies[1].getBounds();
-        _next[2] = proxies[2].getBounds();
-        _next[3] = proxies[3].getBounds();
-        _next[4] = proxies[4].getBounds();
-
-        layout();
+    if (_isVertical != isHorizontal) {
+        _isVertical = isHorizontal;
+        for (auto i{0U}; i < _thumbnails.size(); ++i) { _current[i] = _thumbnails[i].getBounds(); }
         _transition.play();
-
     } else {
-        // _current[0] = _thumbnails[0].getBounds();
-        // _current[1] = _thumbnails[1].getBounds();
-        // _current[2] = _thumbnails[2].getBounds();
-        // _current[3] = _thumbnails[3].getBounds();
-        // _current[4] = _thumbnails[4].getBounds();
-
-        _next[0] = proxies[0].getBounds();
-        _next[1] = proxies[1].getBounds();
-        _next[2] = proxies[2].getBounds();
-        _next[3] = proxies[3].getBounds();
-        _next[4] = proxies[4].getBounds();
-
         layout();
     }
+}
+
+TabButton::TabButton(juce::String const& name) : Button{name} {}
+
+auto TabButton::paintButton(juce::Graphics& g, bool /*isHighlighted*/, bool /*isDown*/) -> void
+{
+    g.setFont(juce::Font{18.0F}.boldened());
+    g.setColour(juce::Colours::white);
+    g.drawText(getButtonText(), getLocalBounds().toFloat(), juce::Justification::centred);
 }
 
 }  // namespace mc
 
 MainComponent::MainComponent()
 {
+    // _expand.keyframes<0>(0.0F, 1.0F);
+
     addAndMakeVisible(_pathToggle);
     addAndMakeVisible(_transitionToggle);
     addAndMakeVisible(_widgetsToggle);
@@ -285,6 +276,19 @@ MainComponent::MainComponent()
     _tabs.addTab({&_widgetsToggle, &_widgets});
     _tabs.addTab({&_bannersToggle, &_banners});
     _tabs.addTab({&_gridsToggle, &_grids});
+    _tabs.onTabSelect = [this](auto const& prev, auto const& next) {
+        _prev = prev.button;
+        _next = next.button;
+
+        auto const expanded  = _prev->getBounds().getUnion(_next->getBounds());
+        auto const keyframes = std::vector{
+            mc::Keyframe{_prev->getBounds(),  0.0},
+            mc::Keyframe{          expanded, 0.25},
+            mc::Keyframe{_next->getBounds(),  1.0},
+        };
+        _expand.keyframes<0>(keyframes);
+        _expand.play();
+    };
     _tabs.selectFirstTab();
 
     setSize(600, 400);
@@ -293,6 +297,16 @@ MainComponent::MainComponent()
 auto MainComponent::paint(juce::Graphics& g) -> void
 {
     g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
+
+    g.setColour(juce::Colours::black);
+    g.fillRoundedRectangle(_pathToggle.getBounds().toFloat(), 8.0F);
+    g.fillRoundedRectangle(_transitionToggle.getBounds().toFloat(), 8.0F);
+    g.fillRoundedRectangle(_widgetsToggle.getBounds().toFloat(), 8.0F);
+    g.fillRoundedRectangle(_bannersToggle.getBounds().toFloat(), 8.0F);
+    g.fillRoundedRectangle(_gridsToggle.getBounds().toFloat(), 8.0F);
+
+    g.setColour(juce::Colours::green);
+    g.fillRoundedRectangle(_expand.get<0>().toFloat(), 8.0F);
 }
 
 auto MainComponent::resized() -> void
@@ -321,4 +335,5 @@ auto MainComponent::resized() -> void
     grid.performLayout(controls);
 
     _tabs.setContentBounds(area.reduced(4));
+    _expand.keyframes<0>(_prev->getBounds(), _next->getBounds());
 }

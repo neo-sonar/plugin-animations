@@ -17,6 +17,7 @@ auto AnimationTimer::play(AnimationDirection dir) -> void
 {
     _direction  = dir;
     _state      = State::Delay;
+    _position   = 0.0;
     _delayStart = std::chrono::system_clock::now();
 
     if (not _vblankAttachment) {
