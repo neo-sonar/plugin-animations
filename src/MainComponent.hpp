@@ -14,16 +14,15 @@ struct PathExamples final : juce::Component
     auto paint(juce::Graphics& g) -> void override;
 
 private:
-    [[nodiscard]] static auto makeTransition(juce::Component* comp) -> TransitionSpec
+    [[nodiscard]] static auto makeTransition() -> TransitionSpec
     {
         return {
-            .parent    = comp,
             .duration  = std::chrono::milliseconds{2000},
             .isLooping = true,
         };
     }
 
-    Transition<float> _trim{makeTransition(this), 0.0F, 1.0F};
+    Transition<float> _trim{this, makeTransition()};
 };
 
 struct TransitionExamples final : juce::Component
@@ -35,16 +34,15 @@ struct TransitionExamples final : juce::Component
     auto resized() -> void override;
 
 private:
-    [[nodiscard]] static auto makeTransition(juce::Component* comp) -> TransitionSpec
+    [[nodiscard]] static auto makeTransition() -> TransitionSpec
     {
         return {
-            .parent    = comp,
             .duration  = std::chrono::milliseconds{2000},
             .isLooping = true,
         };
     }
 
-    Transition<float> _trim{makeTransition(this), 0.0F, 1.0F};
+    Transition<float> _trim{this, makeTransition()};
     juce::ComboBox _transition{"Transition"};
     juce::Slider _duration{juce::Slider::LinearHorizontal, juce::Slider::TextBoxRight};
     juce::Rectangle<float> _canvas{};

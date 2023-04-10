@@ -17,10 +17,11 @@ struct LoaderCarousel final : juce::Component
     static_assert(NumPoints >= 3);
 
     LoaderCarousel()
-        : _scale1{makeTransition(), 1.0F, 0.0F}
-        , _translate2{makeTransition(), 0.0F, 24.0F}
-        , _scale3{makeTransition(), 0.0F, 1.0F}
     {
+        _scale1.keyframes(1.0F, 0.0F);
+        _translate2.keyframes(0.0F, 24.0F);
+        _scale3.keyframes(0.0F, 1.0F);
+
         _scale1.forward();
         _translate2.forward();
         _scale3.forward();
@@ -52,19 +53,18 @@ struct LoaderCarousel final : juce::Component
     }
 
 private:
-    auto makeTransition() -> TransitionSpec
+    static auto makeTransition() -> TransitionSpec
     {
         return {
-            .parent         = this,
             .duration       = std::chrono::milliseconds{600},
             .isLooping      = true,
-            .timingFunction = EaseInOutBack,
+            .timingFunction = TimingFunction::EaseInOutBack,
         };
     }
 
-    Transition<float> _scale1;
-    Transition<float> _translate2;
-    Transition<float> _scale3;
+    Transition<float> _scale1{this, makeTransition()};
+    Transition<float> _translate2{this, makeTransition()};
+    Transition<float> _scale3{this, makeTransition()};
 
     std::array<juce::Rectangle<float>, NumPoints> _points{};
 };

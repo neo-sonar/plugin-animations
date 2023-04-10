@@ -35,7 +35,7 @@ struct BannerCarousel final : juce::Component
 private:
     struct Content final : juce::Component
     {
-        Content() : _move{makeTransition(), 0.0F, 1.0F} {}
+        Content() { _move.keyframes(0.0F, 1.0F); }
 
         ~Content() override = default;
 
@@ -110,18 +110,17 @@ private:
         }
 
     private:
-        auto makeTransition() -> TransitionSpec
+        static auto makeTransition() -> TransitionSpec
         {
             return {
-                .parent         = this,
                 .duration       = std::chrono::milliseconds{600},
                 .delay          = std::chrono::milliseconds{0},
                 .isLooping      = false,
-                .timingFunction = EaseInOutBack,
+                .timingFunction = TimingFunction::EaseInOutBack,
             };
         }
 
-        Transition<float> _move;
+        Transition<float> _move{this, makeTransition()};
         std::array<juce::Rectangle<float>, 5> _current;
         std::array<juce::Rectangle<float>, 5> _next;
     };

@@ -7,17 +7,19 @@ namespace mc {
 template<typename T>
 struct TransitionProperty
 {
-    TransitionProperty(T const& a, T const& b) : _keyframes{a, b} {}
+    constexpr TransitionProperty() = default;
 
-    auto keyframes(T const& a, T const& b) { _keyframes = {a, b}; }
+    constexpr TransitionProperty(T const& a, T const& b) : _keyframes{a, b} {}
 
-    [[nodiscard]] auto get(double t) const -> T
+    constexpr auto keyframes(T const& a, T const& b) { _keyframes = {a, b}; }
+
+    [[nodiscard]] constexpr auto get(double t) const -> T
     {
         return TransitionTraits<T>::interpolate(_keyframes.front(), _keyframes.back(), t);
     }
 
 private:
-    std::array<T, 2> _keyframes;
+    std::array<T, 2> _keyframes{};
 };
 
 }  // namespace mc
