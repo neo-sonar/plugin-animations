@@ -30,6 +30,7 @@ target_sources(AnimationDemo
         "src/AnimatedButton.cpp"
         "src/AnimatedButton.hpp"
         "src/Animation.hpp"
+        "src/AnimationDirection.hpp"
         "src/AnimationTimer.hpp"
         "src/AnimationTimer.cpp"
         "src/BannerCarousel.hpp"

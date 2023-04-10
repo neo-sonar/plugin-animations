@@ -21,7 +21,7 @@ struct LoaderCarousel final : juce::Component
     {
         _transition.keyframes<ScaleIndex>(1.0F, 0.0F);
         _transition.keyframes<TranslateIndex>(0.0F, 24.0F);
-        _transition.forward();
+        _transition.play();
     }
 
     ~LoaderCarousel() override = default;

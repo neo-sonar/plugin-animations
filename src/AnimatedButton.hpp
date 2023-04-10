@@ -15,11 +15,20 @@ struct AnimatedButton final : juce::Button
     auto resized() -> void override;
 
 private:
-    Transition<juce::Rectangle<float>> _margin{this};
-    Transition<float> _corner{this};
+    enum Index
+    {
+        FontIndex = 0,
+
+        MarginIndex = 0,
+        CornerIndex = 1,
+
+        BackgroundIndex = 0,
+        TextIndex       = 1,
+    };
+
     Transition<float> _font{this};
-    Transition<juce::Colour> _background{this};
-    Transition<juce::Colour> _text{this};
+    Transition<juce::Rectangle<float>, float> _layout{this};
+    Transition<juce::Colour, juce::Colour> _color{this};
 
     MouseHoverListener _hoverListener{this};
 };

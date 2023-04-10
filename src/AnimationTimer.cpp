@@ -13,11 +13,7 @@ auto AnimationTimer::delay(std::chrono::milliseconds ms) -> void { _delay = ms; 
 
 [[nodiscard]] auto AnimationTimer::position() const -> double { return _position; }
 
-auto AnimationTimer::forward() -> void { start(Direction::Forward); }
-
-auto AnimationTimer::backward() -> void { start(Direction::Backward); }
-
-auto AnimationTimer::start(Direction dir) -> void
+auto AnimationTimer::play(AnimationDirection dir) -> void
 {
     _direction  = dir;
     _state      = State::Delay;
@@ -58,7 +54,7 @@ auto AnimationTimer::tick() -> void
         _position = std::chrono::duration_cast<std::chrono::duration<double>>(delta)
                   / std::chrono::duration_cast<std::chrono::duration<double>>(_duration);
 
-        if (_direction == Direction::Backward) { _position = 1.0 - _position; }
+        if (_direction == AnimationDirection::reverse) { _position = 1.0 - _position; }
         if (onTick) { onTick(); }
         return;
     }

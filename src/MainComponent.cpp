@@ -26,7 +26,7 @@ namespace mc {
 PathExamples::PathExamples()
 {
     _trim.keyframes<0>(0.0F, 1.0F);
-    _trim.forward();
+    _trim.play();
 }
 
 auto PathExamples::paint(juce::Graphics& g) -> void

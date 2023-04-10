@@ -1,8 +1,8 @@
 #pragma once
 
+#include "AnimationTimer.hpp"
 #include "TimingFunction.hpp"
 #include "TransitionProperty.hpp"
-#include "AnimationTimer.hpp"
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
@@ -51,9 +51,9 @@ struct Transition
         std::get<I>(_props).keyframes(a, b);
     }
 
-    auto forward() { _timer.forward(); }
+    auto forward() { _timer.play(AnimationDirection::normal); }
 
-    auto backward() { _timer.backward(); }
+    auto backward() { _timer.play(AnimationDirection::reverse); }
 
     template<int I>
     [[nodiscard]] auto get() const

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "AnimationDirection.hpp"
+
 #include <juce_gui_basics/juce_gui_basics.h>
 
 namespace mc {
@@ -13,18 +15,11 @@ struct AnimationTimer
     auto duration(std::chrono::milliseconds ms) -> void;
     auto delay(std::chrono::milliseconds ms) -> void;
 
-    auto forward() -> void;
-    auto backward() -> void;
+    auto play(AnimationDirection dir) -> void;
 
     std::function<void()> onTick;
 
 private:
-    enum struct Direction : std::uint8_t
-    {
-        Forward,
-        Backward,
-    };
-
     enum struct State : std::uint8_t
     {
         Idle,
@@ -32,11 +27,10 @@ private:
         Transition,
     };
 
-    auto start(Direction dir) -> void;
     auto tick() -> void;
 
     bool _isLooping;
-    Direction _direction{Direction::Forward};
+    AnimationDirection _direction{AnimationDirection::normal};
     State _state{State::Idle};
     double _position{0.0};
 
