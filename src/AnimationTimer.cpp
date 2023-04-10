@@ -1,23 +1,23 @@
-#include "TransitionTimer.hpp"
+#include "AnimationTimer.hpp"
 
 namespace mc {
 
-TransitionTimer::TransitionTimer(juce::Component* parent, bool isLooping)
+AnimationTimer::AnimationTimer(juce::Component* parent, bool isLooping)
     : _isLooping{isLooping}
     , _parent{parent}
 {}
 
-auto TransitionTimer::duration(std::chrono::milliseconds ms) -> void { _duration = ms; }
+auto AnimationTimer::duration(std::chrono::milliseconds ms) -> void { _duration = ms; }
 
-auto TransitionTimer::delay(std::chrono::milliseconds ms) -> void { _delay = ms; }
+auto AnimationTimer::delay(std::chrono::milliseconds ms) -> void { _delay = ms; }
 
-[[nodiscard]] auto TransitionTimer::position() const -> double { return _position; }
+[[nodiscard]] auto AnimationTimer::position() const -> double { return _position; }
 
-auto TransitionTimer::forward() -> void { start(Direction::Forward); }
+auto AnimationTimer::forward() -> void { start(Direction::Forward); }
 
-auto TransitionTimer::backward() -> void { start(Direction::Backward); }
+auto AnimationTimer::backward() -> void { start(Direction::Backward); }
 
-auto TransitionTimer::start(Direction dir) -> void
+auto AnimationTimer::start(Direction dir) -> void
 {
     _direction  = dir;
     _state      = State::Delay;
@@ -28,7 +28,7 @@ auto TransitionTimer::start(Direction dir) -> void
     }
 }
 
-auto TransitionTimer::tick() -> void
+auto AnimationTimer::tick() -> void
 {
     if (_state == State::Idle) { return; }
 

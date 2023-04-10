@@ -3,24 +3,6 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 
 namespace mc {
-struct LinearInterpolation
-{
-    template<typename T>
-    [[nodiscard]] auto operator()(T a, T b, T t) const noexcept -> T
-    {
-        return std::lerp(a, b, t);
-    }
-
-    template<typename T>
-    [[nodiscard]] auto operator()(juce::Point<T> a, juce::Point<T> b, T t) const noexcept
-        -> juce::Point<T>
-    {
-        return {
-            std::lerp(a.x, b.x, t),
-            std::lerp(a.y, b.y, t),
-        };
-    }
-};
 
 struct CubicInterpolation
 {

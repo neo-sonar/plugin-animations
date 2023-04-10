@@ -4,9 +4,9 @@
 
 namespace mc {
 
-struct TransitionTimer
+struct AnimationTimer
 {
-    explicit TransitionTimer(juce::Component* parent, bool isLooping = false);
+    explicit AnimationTimer(juce::Component* parent, bool isLooping = false);
 
     [[nodiscard]] auto position() const -> double;
 

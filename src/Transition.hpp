@@ -2,7 +2,7 @@
 
 #include "TimingFunction.hpp"
 #include "TransitionProperty.hpp"
-#include "TransitionTimer.hpp"
+#include "AnimationTimer.hpp"
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
@@ -66,7 +66,7 @@ struct Transition
 private:
     juce::Component* _parent{nullptr};
     TransitionSpec _spec;
-    TransitionTimer _timer{_parent, false};
+    AnimationTimer _timer{_parent, false};
     std::tuple<TransitionProperty<Ts>...> _props;
 };
 
