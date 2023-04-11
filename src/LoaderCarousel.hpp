@@ -60,8 +60,8 @@ private:
     }
 
     Animation _animation{this, makeAnimation()};
-    TransitionProperty<float> _scale{_animation, 1.0F, 0.0F};
-    TransitionProperty<float> _translate{_animation, 0.0F, 24.0F};
+    AnimationProperty<float> _scale{_animation, 1.0F, 0.0F};
+    AnimationProperty<float> _translate{_animation, 0.0F, 24.0F};
     std::array<juce::Rectangle<float>, NumPoints> _points{};
 };
 

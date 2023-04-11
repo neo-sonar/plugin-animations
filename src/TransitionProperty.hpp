@@ -13,33 +13,31 @@ struct TransitionProperty : KeyframeProperty<T>
 {
     explicit TransitionProperty(Transition& transition) : TransitionProperty{transition, {}, {}} {}
 
-    explicit TransitionProperty(Animation& animation) : TransitionProperty{animation, {}, {}} {}
-
     TransitionProperty(Transition& transition, T const& from, T const& to)
         : KeyframeProperty<T>{from, to}
-        , _position{[t = &transition] { return t->position(); }}
-    {
-        _frames.emplace_back(from, 0.0);
-        _frames.emplace_back(to, 1.0);
-    }
+        , _transition{transition}
+    {}
 
-    TransitionProperty(Animation& animation, T const& from, T const& to)
-        : KeyframeProperty<T>{from, to}
-        , _position{[a = &animation] { return a->position(); }}
-    {
-        _frames.emplace_back(from, 0.0);
-        _frames.emplace_back(to, 1.0);
-    }
-
-    [[nodiscard]] auto get() const -> T
-    {
-        jassert(_position);
-        return KeyframeProperty<T>::get(_position());
-    }
+    [[nodiscard]] auto get() const -> T { return KeyframeProperty<T>::get(_transition.position()); }
 
 private:
-    std::function<double()> _position;
-    std::vector<Keyframe<T>> _frames{};
+    Transition& _transition;
+};
+
+template<typename T>
+struct AnimationProperty : KeyframeProperty<T>
+{
+    explicit AnimationProperty(Animation& animation) : AnimationProperty{animation, {}, {}} {}
+
+    AnimationProperty(Animation& animation, T const& from, T const& to)
+        : KeyframeProperty<T>{from, to}
+        , _animation{animation}
+    {}
+
+    [[nodiscard]] auto get() const -> T { return KeyframeProperty<T>::get(_animation.position()); }
+
+private:
+    Animation& _animation;
 };
 
 }  // namespace mc

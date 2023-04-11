@@ -24,7 +24,7 @@ private:
     }
 
     Animation _animation{this, makeAnimation()};
-    TransitionProperty<float> _trim{_animation};
+    AnimationProperty<float> _trim{_animation};
 };
 
 struct TransitionExamples final : juce::Component
@@ -100,7 +100,7 @@ private:
     }
 
     Animation _animation{this, makeAnimation()};
-    TransitionProperty<float> _transition{_animation};
+    AnimationProperty<float> _transition{_animation};
 
     bool _isVertical{false};
     std::array<juce::Rectangle<int>, 5> _current{};
@@ -143,7 +143,7 @@ private:
     }
 
     mc::Animation _animation{this, makeAnimation()};
-    mc::TransitionProperty<juce::Rectangle<int>> _expand{_animation};
+    mc::AnimationProperty<juce::Rectangle<int>> _expand{_animation};
 
     juce::Button* _prev{nullptr};
     juce::Button* _next{nullptr};

@@ -153,7 +153,7 @@ private:
         }
 
         Animation _animation{this, makeAnimation()};
-        TransitionProperty<float> _move{_animation};
+        AnimationProperty<float> _move{_animation};
 
         std::array<juce::Rectangle<int>, 5> _current;
         std::array<juce::Rectangle<int>, 5> _next;
