@@ -2,7 +2,6 @@
 
 #include "AnimationTimer.hpp"
 #include "TimingFunction.hpp"
-#include "TransitionProperty.hpp"
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
@@ -15,7 +14,6 @@ struct TransitionSpec
     std::function<double(double)> timingFunction{TimingFunction::Linear};
 };
 
-template<typename... Ts>
 struct Transition
 {
     explicit Transition(juce::Component* parent, TransitionSpec const& spec = {})
@@ -33,33 +31,22 @@ struct Transition
         };
     }
 
-    auto duration(std::chrono::milliseconds ms)
+    [[nodiscard]] auto position() const -> double { return _spec.timingFunction(_timer.position()); }
+
+    auto forward() -> void { _timer.play(AnimationDirection::normal); }
+
+    auto backward() -> void { _timer.play(AnimationDirection::reverse); }
+
+    auto duration(std::chrono::milliseconds ms) -> void
     {
         _spec.duration = ms;
         _timer.duration(ms);
     }
 
-    auto delay(std::chrono::milliseconds ms)
+    auto delay(std::chrono::milliseconds ms) -> void
     {
         _spec.delay = ms;
         _timer.delay(ms);
-    }
-
-
-    template<std::size_t I>
-    auto keyframes(auto const& a, auto const& b)
-    {
-        std::get<I>(_props).keyframes(a, b);
-    }
-
-    auto forward() { _timer.play(AnimationDirection::normal); }
-
-    auto backward() { _timer.play(AnimationDirection::reverse); }
-
-    template<std::size_t I>
-    [[nodiscard]] auto get() const
-    {
-        return std::get<I>(_props).get(_spec.timingFunction(_timer.position()));
     }
 
     std::function<void()> onTick;
@@ -68,7 +55,6 @@ private:
     juce::Component* _parent{nullptr};
     TransitionSpec _spec;
     AnimationTimer _timer{_parent, false};
-    std::tuple<TransitionProperty<Ts>...> _props;
 };
 
 }  // namespace mc

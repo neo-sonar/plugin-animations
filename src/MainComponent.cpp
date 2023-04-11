@@ -25,8 +25,8 @@ auto addFittedText(
 namespace mc {
 PathExamples::PathExamples()
 {
-    _trim.keyframes<0>(0.0F, 1.0F);
-    _trim.play();
+    _trim.keyframes(0.0F, 1.0F);
+    _animation.play();
 }
 
 auto PathExamples::paint(juce::Graphics& g) -> void
@@ -42,14 +42,14 @@ auto PathExamples::paint(juce::Graphics& g) -> void
     star.addStar(starArea.getCentre(), 24, 16.0F, 32.0F);
     star.applyTransform(star.getTransformToScaleToFit(starArea.reduced(8.0F), true));
     g.setColour(juce::Colours::red);
-    g.strokePath(mc::TrimPathEffect{_trim.get<0>()}(star), juce::PathStrokeType{2.0F});
+    g.strokePath(mc::TrimPathEffect{_trim.get()}(star), juce::PathStrokeType{2.0F});
 
     // TEXT
     auto glyphs = juce::GlyphArrangement{};
     addFittedText(glyphs, juce::Font{54.0F}, "Submit", canvas, juce::Justification::centred);
     auto submit = juce::Path{};
     glyphs.createPath(submit);
-    g.strokePath(mc::TrimPathEffect{0.0, _trim.get<0>()}(submit), juce::PathStrokeType{3.0F});
+    g.strokePath(mc::TrimPathEffect{0.0, _trim.get()}(submit), juce::PathStrokeType{3.0F});
 }
 
 TransitionExamples::TransitionExamples()
@@ -66,11 +66,11 @@ TransitionExamples::TransitionExamples()
         1
     );
 
-    _trim.keyframes<0>(0.0F, 1.0F);
+    _trim.keyframes(0.0F, 1.0F);
 
     _duration.onValueChange = [this] {
         auto const ms = std::chrono::milliseconds{static_cast<int>(_duration.getValue())};
-        _trim.duration(ms);
+        _tran.duration(ms);
     };
     _duration.setRange(100.0, 10000.0, 1.0);
     _duration.setValue(2000.0);
@@ -179,15 +179,15 @@ auto BannerExamples::resized() -> void
 GridExamples::GridExamples()
 {
     for (auto& thumbnail : _thumbnails) { addAndMakeVisible(thumbnail); }
-    _transition.keyframes<0>(0.0F, 1.0F);
-    _transition.onTick = [this] { layout(); };
+    _transition.keyframes(0.0F, 1.0F);
+    _animation.onTick = [this] { layout(); };
 }
 
 auto GridExamples::layout() -> void
 {
     using Traits = TransitionTraits<juce::Rectangle<int>>;
 
-    auto const pos = static_cast<double>(_transition.get<0>());
+    auto const pos = static_cast<double>(_transition.get());
     _thumbnails[0].setBounds(Traits::interpolate(_current[0], _next[0], pos));
     _thumbnails[1].setBounds(Traits::interpolate(_current[1], _next[1], pos));
     _thumbnails[2].setBounds(Traits::interpolate(_current[2], _next[2], pos));
@@ -239,7 +239,7 @@ auto GridExamples::resized() -> void
     if (_isVertical != isHorizontal) {
         _isVertical = isHorizontal;
         for (auto i{0U}; i < _thumbnails.size(); ++i) { _current[i] = _thumbnails[i].getBounds(); }
-        _transition.play();
+        _animation.play();
     } else {
         layout();
     }
@@ -258,7 +258,7 @@ auto TabButton::paintButton(juce::Graphics& g, bool /*isHighlighted*/, bool /*is
 
 MainComponent::MainComponent()
 {
-    // _expand.keyframes<0>(0.0F, 1.0F);
+    // _expand.keyframes(0.0F, 1.0F);
 
     addAndMakeVisible(_pathToggle);
     addAndMakeVisible(_transitionToggle);
@@ -286,8 +286,8 @@ MainComponent::MainComponent()
             mc::Keyframe{          expanded, 0.25},
             mc::Keyframe{_next->getBounds(),  1.0},
         };
-        _expand.keyframes<0>(keyframes);
-        _expand.play();
+        _expand.keyframes(keyframes);
+        _animation.play();
     };
     _tabs.selectFirstTab();
 
@@ -306,7 +306,7 @@ auto MainComponent::paint(juce::Graphics& g) -> void
     g.fillRoundedRectangle(_gridsToggle.getBounds().toFloat(), 8.0F);
 
     g.setColour(juce::Colours::green);
-    g.fillRoundedRectangle(_expand.get<0>().toFloat(), 8.0F);
+    g.fillRoundedRectangle(_expand.get().toFloat(), 8.0F);
 }
 
 auto MainComponent::resized() -> void
@@ -335,5 +335,5 @@ auto MainComponent::resized() -> void
     grid.performLayout(controls);
 
     _tabs.setContentBounds(area.reduced(4));
-    _expand.keyframes<0>(_prev->getBounds(), _next->getBounds());
+    _expand.keyframes(_prev->getBounds(), _next->getBounds());
 }

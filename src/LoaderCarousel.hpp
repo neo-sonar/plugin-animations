@@ -17,19 +17,14 @@ struct LoaderCarousel final : juce::Component
 {
     static_assert(NumPoints >= 3);
 
-    LoaderCarousel()
-    {
-        _transition.keyframes<ScaleIndex>(1.0F, 0.0F);
-        _transition.keyframes<TranslateIndex>(0.0F, 24.0F);
-        _transition.play();
-    }
+    LoaderCarousel() { _animation.play(); }
 
     ~LoaderCarousel() override = default;
 
     auto paint(juce::Graphics& g) -> void override
     {
-        auto const scale     = _transition.get<ScaleIndex>();
-        auto const translate = _transition.get<TranslateIndex>();
+        auto const scale     = _scale.get();
+        auto const translate = _translate.get();
         auto const width     = _points.front().proportionOfWidth(0.5F);
 
         g.setColour(juce::Colours::white);
@@ -51,16 +46,10 @@ struct LoaderCarousel final : juce::Component
         auto const last       = _points.back();
         auto const beforeLast = std::prev(_points.end(), 2);
         auto const distance   = last.getCentreX() - beforeLast->getCentreX();
-        _transition.keyframes<TranslateIndex>(0.0F, distance);
+        _translate.keyframes(0.0F, distance);
     }
 
 private:
-    enum Index
-    {
-        ScaleIndex,
-        TranslateIndex,
-    };
-
     static auto makeAnimation() -> AnimationSpec
     {
         return {
@@ -70,8 +59,10 @@ private:
         };
     }
 
+    Animation _animation{this, makeAnimation()};
+    TransitionProperty<float> _scale{_animation, 1.0F, 0.0F};
+    TransitionProperty<float> _translate{_animation, 0.0F, 24.0F};
     std::array<juce::Rectangle<float>, NumPoints> _points{};
-    Animation<float, float> _transition{this, makeAnimation()};
 };
 
 }  // namespace mc

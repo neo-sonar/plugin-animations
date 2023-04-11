@@ -1,10 +1,10 @@
 #pragma once
 
 #include "AnimatedButton.hpp"
-#include "Animation.hpp"
 #include "BannerCarousel.hpp"
 #include "LoaderCarousel.hpp"
 #include "TabSelector.hpp"
+#include "TransitionProperty.hpp"
 
 namespace mc {
 struct PathExamples final : juce::Component
@@ -23,7 +23,8 @@ private:
         };
     }
 
-    Animation<float> _trim{this, makeAnimation()};
+    Animation _animation{this, makeAnimation()};
+    TransitionProperty<float> _trim{_animation};
 };
 
 struct TransitionExamples final : juce::Component
@@ -40,7 +41,9 @@ private:
         return {.duration = std::chrono::milliseconds{2000}};
     }
 
-    Transition<float> _trim{this, makeTransition()};
+    Transition _tran{this, makeTransition()};
+    TransitionProperty<float> _trim{_tran};
+
     juce::ComboBox _transition{"Transition"};
     juce::Slider _duration{juce::Slider::LinearHorizontal, juce::Slider::TextBoxRight};
     juce::Rectangle<float> _canvas{};
@@ -96,7 +99,9 @@ private:
         };
     }
 
-    Animation<float> _transition{this, makeAnimation()};
+    Animation _animation{this, makeAnimation()};
+    TransitionProperty<float> _transition{_animation};
+
     bool _isVertical{false};
     std::array<juce::Rectangle<int>, 5> _current{};
     std::array<juce::Rectangle<int>, 5> _next{};
@@ -137,7 +142,8 @@ private:
         };
     }
 
-    mc::Animation<juce::Rectangle<int>> _expand{this, makeAnimation()};
+    mc::Animation _animation{this, makeAnimation()};
+    mc::TransitionProperty<juce::Rectangle<int>> _expand{_animation};
 
     juce::Button* _prev{nullptr};
     juce::Button* _next{nullptr};

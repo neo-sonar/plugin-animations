@@ -70,8 +70,8 @@ private:
         Content()
         {
             for (auto& thumbnail : _thumbnails) { addAndMakeVisible(thumbnail); }
-            _move.keyframes<0>(0.0F, 1.0F);
-            _move.onTick = [this] { layout(); };
+            _move.keyframes(0.0F, 1.0F);
+            _animation.onTick = [this] { layout(); };
         }
 
         ~Content() override = default;
@@ -82,14 +82,14 @@ private:
         {
             _current = _next;
             std::rotate(_next.begin(), std::next(_next.begin()), _next.end());
-            _move.play();
+            _animation.play();
         }
 
         auto next() -> void
         {
             _current = _next;
             std::rotate(_next.rbegin(), std::next(_next.rbegin()), _next.rend());
-            _move.play();
+            _animation.play();
         }
 
         auto resized() -> void override
@@ -134,7 +134,7 @@ private:
         {
             using Traits = TransitionTraits<juce::Rectangle<int>>;
 
-            auto const pos = static_cast<double>(_move.get<0>());
+            auto const pos = static_cast<double>(_move.get());
             _thumbnails[0].setBounds(Traits::interpolate(_current[0], _next[0], pos));
             _thumbnails[1].setBounds(Traits::interpolate(_current[1], _next[1], pos));
             _thumbnails[2].setBounds(Traits::interpolate(_current[2], _next[2], pos));
@@ -152,7 +152,9 @@ private:
             };
         }
 
-        Animation<float> _move{this, makeAnimation()};
+        Animation _animation{this, makeAnimation()};
+        TransitionProperty<float> _move{_animation};
+
         std::array<juce::Rectangle<int>, 5> _current;
         std::array<juce::Rectangle<int>, 5> _next;
         std::array<Thumbnail, 5> _thumbnails{

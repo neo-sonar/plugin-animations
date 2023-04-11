@@ -2,6 +2,7 @@
 
 #include "MouseHoverListener.hpp"
 #include "Transition.hpp"
+#include "TransitionProperty.hpp"
 
 #include <juce_gui_extra/juce_gui_extra.h>
 
@@ -15,20 +16,12 @@ struct AnimatedButton final : juce::Button
     auto resized() -> void override;
 
 private:
-    enum Index
-    {
-        FontIndex = 0,
-
-        MarginIndex = 0,
-        CornerIndex = 1,
-
-        BackgroundIndex = 0,
-        TextIndex       = 1,
-    };
-
-    Transition<float> _font{this};
-    Transition<juce::Rectangle<float>, float> _layout{this};
-    Transition<juce::Colour, juce::Colour> _color{this};
+    Transition _transition{this};
+    TransitionProperty<float> _font{_transition};
+    TransitionProperty<float> _corner{_transition};
+    TransitionProperty<juce::Rectangle<float>> _layout{_transition};
+    TransitionProperty<juce::Colour> _backgroundColor{_transition};
+    TransitionProperty<juce::Colour> _textColor{_transition};
 
     MouseHoverListener _hoverListener{this};
 };
