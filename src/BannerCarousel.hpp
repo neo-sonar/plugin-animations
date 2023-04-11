@@ -132,7 +132,7 @@ private:
 
         auto layout() -> void
         {
-            using Traits = TransitionTraits<juce::Rectangle<int>>;
+            using Traits = KeyframeTraits<juce::Rectangle<int>>;
 
             auto const pos = static_cast<double>(_move.get());
             _thumbnails[0].setBounds(Traits::interpolate(_current[0], _next[0], pos));

@@ -6,10 +6,10 @@
 namespace mc {
 
 template<typename T>
-struct TransitionTraits;
+struct KeyframeTraits;
 
 template<std::floating_point T>
-struct TransitionTraits<T>
+struct KeyframeTraits<T>
 {
     [[nodiscard]] static constexpr auto interpolate(T a, T b, double t) -> T
     {
@@ -18,7 +18,7 @@ struct TransitionTraits<T>
 };
 
 template<>
-struct TransitionTraits<juce::Colour>
+struct KeyframeTraits<juce::Colour>
 {
     [[nodiscard]] static auto interpolate(juce::Colour a, juce::Colour b, double t) -> juce::Colour
     {
@@ -27,7 +27,7 @@ struct TransitionTraits<juce::Colour>
 };
 
 template<typename T>
-struct TransitionTraits<juce::Rectangle<T>>
+struct KeyframeTraits<juce::Rectangle<T>>
 {
     [[nodiscard]] static auto
     interpolate(juce::Rectangle<T> const& a, juce::Rectangle<T> const& b, double t)
@@ -41,7 +41,7 @@ struct TransitionTraits<juce::Rectangle<T>>
                 std::lerp(a.getHeight(), b.getHeight(), static_cast<T>(t)),
             };
         } else {
-            using Double = TransitionTraits<juce::Rectangle<double>>;
+            using Double = KeyframeTraits<juce::Rectangle<double>>;
             return Double::interpolate(a.toDouble(), b.toDouble(), t).template toType<T>();
         }
     }

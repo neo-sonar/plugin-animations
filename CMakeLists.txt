@@ -34,6 +34,9 @@ target_sources(AnimationDemo
         "src/AnimationTimer.hpp"
         "src/AnimationTimer.cpp"
         "src/BannerCarousel.hpp"
+        "src/Keyframe.hpp"
+        "src/KeyframeProperty.hpp"
+        "src/KeyframeTraits.hpp"
         "src/Main.cpp"
         "src/MainComponent.hpp"
         "src/MainComponent.cpp"
@@ -43,7 +46,6 @@ target_sources(AnimationDemo
         "src/TimingFunction.hpp"
         "src/Transition.hpp"
         "src/TransitionProperty.hpp"
-        "src/TransitionTraits.hpp"
         "src/TrimPathEffect.hpp"
         "src/TrimPathEffect.cpp"
 )
