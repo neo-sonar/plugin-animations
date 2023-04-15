@@ -8,6 +8,15 @@ namespace mc {
 template<typename T>
 struct KeyframeTraits;
 
+template<std::integral T>
+struct KeyframeTraits<T>
+{
+    [[nodiscard]] static constexpr auto interpolate(T a, T b, double t) -> T
+    {
+        return static_cast<T>(std::lerp(a, b, t));
+    }
+};
+
 template<std::floating_point T>
 struct KeyframeTraits<T>
 {

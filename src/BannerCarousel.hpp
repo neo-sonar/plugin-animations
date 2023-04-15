@@ -15,7 +15,7 @@ struct Thumbnail final : juce::Component
 
     ~Thumbnail() override = default;
 
-    auto paint(juce::Graphics& g) -> void
+    auto paint(juce::Graphics& g) -> void override
     {
         g.setGradientFill(_gradient);
         g.fillRoundedRectangle(getLocalBounds().toFloat(), 4.0F);

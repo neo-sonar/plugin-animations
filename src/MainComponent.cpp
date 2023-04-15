@@ -2,7 +2,7 @@
 
 #include "TrimPathEffect.hpp"
 
-auto addFittedText(
+static auto addFittedText(
     juce::GlyphArrangement& glyphs,
     juce::Font const& font,
     juce::String const& text,

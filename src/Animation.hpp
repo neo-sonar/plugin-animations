@@ -57,6 +57,7 @@ private:
     juce::Component* _parent{nullptr};
     AnimationSpec _spec;
     AnimationTimer _timer{_parent, _spec.isLooping};
+    // v2::Timer _timer{_parent, _spec.isLooping};
 };
 
 }  // namespace mc

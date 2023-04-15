@@ -11,4 +11,10 @@ struct Keyframe
     double position{};
 };
 
+template<typename T>
+Keyframe(T) -> Keyframe<T>;
+
+template<typename T>
+Keyframe(T, double) -> Keyframe<T>;
+
 }  // namespace mc

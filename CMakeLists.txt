@@ -19,6 +19,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+add_subdirectory(3rd_party/sml)
 add_subdirectory(3rd_party/JUCE)
 set_directory_properties(PROPERTIES JUCE_COMPANY_COPYRIGHT "Copyright 2023 digitaldreams.audio")
 set_directory_properties(PROPERTIES JUCE_COMPANY_NAME "digitaldreams.audio")
@@ -63,6 +64,7 @@ target_link_libraries(AnimationDemo
     PRIVATE
         juce::juce_gui_extra
     PUBLIC
+        boost::sml
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags
