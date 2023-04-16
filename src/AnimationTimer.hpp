@@ -2,7 +2,7 @@
 
 #include "AnimationDirection.hpp"
 
-// #include <boost/sml.hpp>
+#include <boost/sml.hpp>
 #include <juce_gui_basics/juce_gui_basics.h>
 
 namespace mc {
@@ -45,213 +45,163 @@ private:
     std::unique_ptr<juce::VBlankAttachment> _vblankAttachment;
 };
 
-// namespace v2 {
+namespace v2 {
 
-// struct StateMachineLogger
-// {
-//     template<class SM, class TEvent>
-//     void log_process_event(TEvent const&)
-//     {
-//         printf(
-//             "[%s][process_event] %s\n",
-//             boost::sml::aux::get_type_name<SM>(),
-//             boost::sml::aux::get_type_name<TEvent>()
-//         );
-//     }
+struct Spec
+{
+    bool isLooping{false};
+    std::chrono::milliseconds delay{0};
+    std::chrono::milliseconds duration{1000};
+    std::function<void()> onTick{};
+};
 
-//     template<class SM, class TGuard, class TEvent>
-//     void log_guard(TGuard const&, TEvent const&, bool result)
-//     {
-//         printf(
-//             "[%s][guard] %s %s %s\n",
-//             boost::sml::aux::get_type_name<SM>(),
-//             boost::sml::aux::get_type_name<TGuard>(),
-//             boost::sml::aux::get_type_name<TEvent>(),
-//             (result ? "[OK]" : "[Reject]")
-//         );
-//     }
+// states
+struct Idle
+{};
 
-//     template<class SM, class TAction, class TEvent>
-//     void log_action(TAction const&, TEvent const&)
-//     {
-//         printf(
-//             "[%s][action] %s %s\n",
-//             boost::sml::aux::get_type_name<SM>(),
-//             boost::sml::aux::get_type_name<TAction>(),
-//             boost::sml::aux::get_type_name<TEvent>()
-//         );
-//     }
+struct Waiting
+{
+    std::chrono::system_clock::time_point start{};
+};
 
-//     template<class SM, class TSrcState, class TDstState>
-//     void log_state_change(TSrcState const& src, TDstState const& dst)
-//     {
-//         printf(
-//             "[%s][transition] %s -> %s\n",
-//             boost::sml::aux::get_type_name<SM>(),
-//             src.c_str(),
-//             dst.c_str()
-//         );
-//     }
-// };
+struct Running
+{
+    std::chrono::system_clock::time_point start{};
+    std::chrono::system_clock::time_point now{};
+};
 
-// struct Spec
-// {
-//     bool isLooping{false};
-//     std::chrono::milliseconds delay{0};
-//     std::chrono::milliseconds duration{1000};
-//     std::function<void()> onTick{};
-// };
+struct Paused
+{
+    std::chrono::system_clock::time_point start{};
+};
 
-// // states
-// struct Idle
-// {};
+struct Stopped
+{};
 
-// struct Waiting
-// {
-//     std::chrono::system_clock::time_point start{};
-// };
+// events
+struct Play
+{
+    std::chrono::system_clock::time_point now{};
+    AnimationDirection direction{AnimationDirection::normal};
+};
 
-// struct Running
-// {
-//     std::chrono::system_clock::time_point start{};
-//     std::chrono::system_clock::time_point now{};
-// };
+struct Pause
+{};
 
-// struct Paused
-// {
-//     std::chrono::system_clock::time_point start{};
-// };
+struct Tick
+{
+    std::chrono::system_clock::time_point now{};
+};
 
-// // events
-// struct Play
-// {
-//     std::chrono::system_clock::time_point now{};
-//     AnimationDirection direction{AnimationDirection::normal};
-// };
+struct StateMachine
+{
+    auto operator()() const noexcept
+    {
+        using namespace boost::sml;
 
-// struct Pause
-// {};
+        auto startWaiting = [](Waiting& w, Play const& play) { w.start = play.now; };
+        auto startRunning = [](Tick const& tick, Running& r) { r.start = tick.now; };
 
-// struct Tick
-// {
-//     std::chrono::system_clock::time_point now{};
-// };
+        auto updatePosition = [](Spec& spec, Tick const& tick, Running& running) {
+            running.now = tick.now;
 
-// struct StateMachine
-// {
-//     auto operator()() const noexcept
-//     {
-//         using namespace boost::sml;
+            if (spec.isLooping) {
+                auto const delta = tick.now - running.start;
+                if (delta >= spec.duration) {
+                    auto const wrapAround = delta - spec.duration;
+                    running.start         = tick.now - wrapAround;
+                }
+            }
 
-//         auto startWaiting = [](Waiting& w) { w.start = std::chrono::system_clock::now(); };
-//         auto startRunning = [](Running& r) { r.start = std::chrono::system_clock::now(); };
+            spec.onTick();
+        };
 
-//         auto updatePosition = [](Spec& spec, Tick const& tick, Running& running) {
-//             // DBG("UPDATE: pos");
-//             running.now = tick.now;
-//             if (spec.onTick) { spec.onTick(); }
-//         };
+        auto waitTimeRemaining = [](Spec const& spec, Tick const& tick, Waiting const& waiting) {
+            auto const delta = tick.now - waiting.start;
+            return delta < spec.delay;
+        };
 
-//         auto waitTimeRemaining = [](Spec const& spec, Tick const& tick, Waiting const& waiting) {
-//             auto const delta = tick.now - waiting.start;
-//             DBG("waitStart " << std::chrono::duration_cast<std::chrono::milliseconds>(
-//                                     waiting.start.time_since_epoch()
-//                 )
-//                                     .count());
-//             // DBG("waitTime " <<
-//             // std::chrono::duration_cast<std::chrono::milliseconds>(delta).count()); DBG("waitTime "
-//             // << std::chrono::duration_cast<std::chrono::milliseconds>(delta).count());
-//             return delta < spec.delay;
-//         };
+        auto runTimeRemaining = [](Spec const& spec, Tick const& tick, Running const& running) {
+            if (spec.isLooping) { return true; }
+            auto const delta = tick.now - running.start;
+            return delta < spec.duration;
+        };
 
-//         auto runTimeRemaining = [](Spec const& spec, Tick const& tick, Running const& running) {
-//             auto const delta = tick.now - running.start;
-//             DBG("runTime " << std::chrono::duration_cast<std::chrono::milliseconds>(delta).count());
-//             return delta < spec.duration;
-//         };
+        // clang-format off
+            return make_transition_table(
+               *state<Idle>     + event<Play>                        / startWaiting   = state<Waiting>,
+                state<Waiting>  + event<Tick>[waitTimeRemaining]                                      ,
+                state<Waiting>  + event<Tick>[!waitTimeRemaining]    / startRunning   = state<Running>,
+                state<Running>  + event<Tick>[runTimeRemaining]      / updatePosition                 ,
+                state<Running>  + event<Tick>[!runTimeRemaining]                      = X
+            );
+        // clang-format on
+    }
+};
 
-//         // clang-format off
-//             return make_transition_table(
-//                *state<Idle>     + event<Play>                        / startWaiting   = state<Waiting>,
-//                 state<Waiting>  + event<Tick>[waitTimeRemaining]                                      ,
-//                 state<Waiting>  + event<Tick>[not waitTimeRemaining] / startRunning   = state<Running>,
-//                 state<Running>  + event<Tick>[runTimeRemaining]      / updatePosition                 ,
-//                 state<Running>  + event<Tick>[not runTimeRemaining]                   = X
-//             );
-//         // clang-format on
-//     }
-// };
+struct Timer
+{
+    explicit Timer(juce::Component* parent, bool isLooping = false)
+        : _spec{.isLooping = isLooping}
+        , _parent{parent}
+    {
+        _spec.onTick = [this] {
+            jassert(this->onTick);
+            this->onTick();
+        };
+    }
 
-// template<typename... Ts>
-// struct Overload : Ts...
-// {
-//     using Ts::operator()...;
-// };
+    [[nodiscard]] auto position() const -> double
+    {
+        if (!_sm) { return 0.0; }
+        using namespace boost::sml;
 
-// template<typename... Ts>
-// Overload(Ts...) -> Overload<Ts...>;
+        if (_sm->is(X)) { return 1.0; }
+        if (_sm->is(state<Idle>)) { return 0.0; }
+        if (_sm->is(state<Waiting>)) { return 0.0; }
 
-// struct Timer
-// {
-//     explicit Timer(juce::Component* parent, bool isLooping = false)
-//         : _spec{.isLooping = isLooping}
-//         , _parent{parent}
-//     {
-//         _spec.onTick = [this] {
-//             jassert(this->onTick);
-//             this->onTick();
-//         };
-//     }
+        if (_sm->is(state<Running>)) {
+            namespace chrono = std::chrono;
+            return chrono::duration_cast<chrono::duration<double>>(_running.now - _running.start)
+                 / chrono::duration_cast<chrono::duration<double>>(_spec.duration);
+        }
 
-//     [[nodiscard]] auto position() const -> double
-//     {
-//         using namespace boost::sml;
+        jassertfalse;
+        return 0.0;
+    }
 
-//         if (_sm.is(X)) { return 1.0; }
-//         if (_sm.is(state<Idle>)) { return 0.0; }
-//         if (_sm.is(state<Waiting>)) { return 0.0; }
+    auto duration(std::chrono::milliseconds ms) -> void { _spec.duration = ms; }
 
-//         if (_sm.is(state<Running>)) {
-//             auto pos     = 0.0;
-//             auto generic = [](auto) {};
-//             auto running = [&pos, this](Running running) {
-//                 namespace chrono = std::chrono;
-//                 auto delta       = running.now - running.start;
-//                 auto dur         = chrono::duration_cast<chrono::duration<double>>(_spec.duration);
-//                 pos              = chrono::duration_cast<chrono::duration<double>>(delta) / dur;
-//             };
-//             _sm.visit_current_states(Overload{generic, running});
-//             return pos;
-//         }
+    auto delay(std::chrono::milliseconds ms) -> void { _spec.delay = ms; }
 
-//         jassertfalse;
-//         return 0.0;
-//     }
+    auto play(AnimationDirection dir) -> void
+    {
+        _sm = std::make_unique<boost::sml::sm<StateMachine>>(_spec, _waiting, _running, _paused);
+        _sm->process_event(Play{
+            .now       = std::chrono::system_clock::now(),
+            .direction = dir,
+        });
+    }
 
-//     auto duration(std::chrono::milliseconds ms) -> void { _spec.duration = ms; }
+    std::function<void()> onTick;
 
-//     auto delay(std::chrono::milliseconds ms) -> void { _spec.delay = ms; }
+private:
+    auto tick() -> void
+    {
+        if (!_sm) { return; }
+        _sm->process_event(Tick{.now = std::chrono::system_clock::now()});
+    }
 
-//     auto play(AnimationDirection dir) -> void { _sm.process_event(Play{.direction = dir}); }
+    Spec _spec{};
+    Waiting _waiting{};
+    Running _running{};
+    Paused _paused{};
+    std::unique_ptr<boost::sml::sm<StateMachine>> _sm;
 
-//     std::function<void()> onTick;
+    juce::Component* _parent;
+    juce::VBlankAttachment _vblankAttachment{_parent, [this] { tick(); }};
+};
 
-// private:
-//     auto tick() -> void
-//     {
-//         _sm.process_event(Tick{
-//             .now = std::chrono::system_clock::now(),
-//         });
-//     }
-
-//     Spec _spec{};
-//     StateMachineLogger _logger;
-//     boost::sml::sm<StateMachine, boost::sml::logger<StateMachineLogger>> _sm{_spec, _logger};
-
-//     juce::Component* _parent;
-//     juce::VBlankAttachment _vblankAttachment{_parent, [this] { tick(); }};
-// };
-
-// }  // namespace v2
+}  // namespace v2
 
 }  // namespace mc
