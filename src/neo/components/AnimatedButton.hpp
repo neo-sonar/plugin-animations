@@ -1,7 +1,6 @@
 #pragma once
 
 #include "neo/animations/Transition.hpp"
-#include "neo/animations/TransitionProperty.hpp"
 #include "neo/components/MouseHoverListener.hpp"
 
 #include <juce_gui_extra/juce_gui_extra.h>

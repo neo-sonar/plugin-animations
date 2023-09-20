@@ -1,9 +1,12 @@
 #pragma once
 
+#include "neo/animations/KeyframeProperty.hpp"
 #include "neo/animations/KeyframeTimer.hpp"
 #include "neo/animations/TimingFunction.hpp"
 
 #include <juce_gui_basics/juce_gui_basics.h>
+
+#include <span>
 
 namespace neo {
 
@@ -55,6 +58,22 @@ private:
     juce::Component* _parent{nullptr};
     Spec _spec;
     KeyframeTimer _timer{_parent, false};
+};
+
+template<typename T>
+struct TransitionProperty : KeyframeProperty<T>
+{
+    explicit TransitionProperty(Transition& transition) : TransitionProperty{transition, {}, {}} {}
+
+    TransitionProperty(Transition& transition, T const& from, T const& to)
+        : KeyframeProperty<T>{from, to}
+        , _transition{transition}
+    {}
+
+    [[nodiscard]] auto get() const -> T { return KeyframeProperty<T>::get(_transition.getPosition()); }
+
+private:
+    Transition& _transition;
 };
 
 }  // namespace neo

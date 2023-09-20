@@ -1,6 +1,8 @@
 #pragma once
 
+#include "neo/animations/Animation.hpp"
 #include "neo/animations/TimingFunction.hpp"
+#include "neo/animations/Transition.hpp"
 #include "neo/components/AnimatedButton.hpp"
 
 namespace neo {

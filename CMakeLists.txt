@@ -39,7 +39,6 @@ target_sources(AnimationDemo
         "src/neo/animations/KeyframeTraits.hpp"
         "src/neo/animations/TimingFunction.hpp"
         "src/neo/animations/Transition.hpp"
-        "src/neo/animations/TransitionProperty.hpp"
 
         "src/neo/components/AnimatedButton.cpp"
         "src/neo/components/AnimatedButton.hpp"
@@ -48,6 +47,17 @@ target_sources(AnimationDemo
         "src/neo/components/MouseHoverListener.hpp"
         "src/neo/components/TabSelector.hpp"
         "src/neo/components/TabSelector.cpp"
+
+        "src/neo/examples/BannerExamples.hpp"
+        "src/neo/examples/BannerExamples.cpp"
+        "src/neo/examples/GridExamples.hpp"
+        "src/neo/examples/GridExamples.cpp"
+        "src/neo/examples/PathExamples.hpp"
+        "src/neo/examples/PathExamples.cpp"
+        "src/neo/examples/TransitionExamples.hpp"
+        "src/neo/examples/TransitionExamples.cpp"
+        "src/neo/examples/WidgetsExamples.hpp"
+        "src/neo/examples/WidgetsExamples.cpp"
 
         "src/neo/graphics/TrimPathEffect.hpp"
         "src/neo/graphics/TrimPathEffect.cpp"
