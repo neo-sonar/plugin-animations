@@ -7,10 +7,7 @@ struct Application final : juce::JUCEApplication
 
     auto getApplicationName() -> juce::String const override { return JUCE_APPLICATION_NAME_STRING; }
 
-    auto getApplicationVersion() -> juce::String const override
-    {
-        return JUCE_APPLICATION_VERSION_STRING;
-    }
+    auto getApplicationVersion() -> juce::String const override { return JUCE_APPLICATION_VERSION_STRING; }
 
     auto moreThanOneInstanceAllowed() -> bool override { return true; }
 
@@ -24,19 +21,14 @@ struct Application final : juce::JUCEApplication
 
     auto systemRequestedQuit() -> void override { quit(); }
 
-    auto anotherInstanceStarted(juce::String const& commandLine) -> void override
-    {
-        juce::ignoreUnused(commandLine);
-    }
+    auto anotherInstanceStarted(juce::String const& commandLine) -> void override { juce::ignoreUnused(commandLine); }
 
     struct MainWindow final : juce::DocumentWindow
     {
         explicit MainWindow(juce::String name)
             : DocumentWindow(
                 name,
-                juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
-                    ResizableWindow::backgroundColourId
-                ),
+                juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(ResizableWindow::backgroundColourId),
                 DocumentWindow::allButtons
             )
         {
@@ -53,10 +45,7 @@ struct Application final : juce::JUCEApplication
             setVisible(true);
         }
 
-        auto closeButtonPressed() -> void override
-        {
-            JUCEApplication::getInstance()->systemRequestedQuit();
-        }
+        auto closeButtonPressed() -> void override { JUCEApplication::getInstance()->systemRequestedQuit(); }
 
     private:
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainWindow)

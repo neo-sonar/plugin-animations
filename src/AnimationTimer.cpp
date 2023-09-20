@@ -2,10 +2,7 @@
 
 namespace mc {
 
-AnimationTimer::AnimationTimer(juce::Component* parent, bool isLooping)
-    : _isLooping{isLooping}
-    , _parent{parent}
-{}
+AnimationTimer::AnimationTimer(juce::Component* parent, bool isLooping) : _isLooping{isLooping}, _parent{parent} {}
 
 auto AnimationTimer::duration(std::chrono::milliseconds ms) -> void { _duration = ms; }
 
@@ -27,7 +24,9 @@ auto AnimationTimer::play(AnimationDirection dir) -> void
 
 auto AnimationTimer::tick() -> void
 {
-    if (_state == State::Idle) { return; }
+    if (_state == State::Idle) {
+        return;
+    }
 
     if (_state == State::Delay) {
         auto const delta = std::chrono::system_clock::now() - _delayStart;
@@ -55,8 +54,12 @@ auto AnimationTimer::tick() -> void
         _position = std::chrono::duration_cast<std::chrono::duration<double>>(delta)
                   / std::chrono::duration_cast<std::chrono::duration<double>>(_duration);
 
-        if (_direction == AnimationDirection::reverse) { _position = 1.0 - _position; }
-        if (onTick) { onTick(); }
+        if (_direction == AnimationDirection::reverse) {
+            _position = 1.0 - _position;
+        }
+        if (onTick) {
+            onTick();
+        }
         return;
     }
 

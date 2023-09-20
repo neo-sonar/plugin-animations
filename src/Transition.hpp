@@ -16,9 +16,7 @@ struct TransitionSpec
 
 struct Transition
 {
-    explicit Transition(juce::Component* parent, TransitionSpec const& spec = {})
-        : _parent{parent}
-        , _spec{spec}
+    explicit Transition(juce::Component* parent, TransitionSpec const& spec = {}) : _parent{parent}, _spec{spec}
     {
         jassert(_parent != nullptr);
 
@@ -27,7 +25,9 @@ struct Transition
 
         onTick        = [this] { _parent->repaint(); };
         _timer.onTick = [this] {
-            if (this->onTick) { this->onTick(); }
+            if (this->onTick) {
+                this->onTick();
+            }
         };
     }
 

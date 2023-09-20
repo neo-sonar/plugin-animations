@@ -17,9 +17,7 @@ struct AnimationSpec
 
 struct Animation
 {
-    explicit Animation(juce::Component* parent, AnimationSpec const& spec = {})
-        : _parent{parent}
-        , _spec{spec}
+    explicit Animation(juce::Component* parent, AnimationSpec const& spec = {}) : _parent{parent}, _spec{spec}
     {
         jassert(_parent != nullptr);
 
@@ -28,7 +26,9 @@ struct Animation
 
         onTick        = [this] { _parent->repaint(); };
         _timer.onTick = [this] {
-            if (this->onTick) { this->onTick(); }
+            if (this->onTick) {
+                this->onTick();
+            }
         };
     }
 
@@ -44,10 +44,7 @@ struct Animation
         _timer.delay(ms);
     }
 
-    auto play(AnimationDirection direction = AnimationDirection::normal) -> void
-    {
-        _timer.play(direction);
-    }
+    auto play(AnimationDirection direction = AnimationDirection::normal) -> void { _timer.play(direction); }
 
     [[nodiscard]] auto position() const -> double { return _spec.timingFunction(_timer.position()); }
 

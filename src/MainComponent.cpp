@@ -10,16 +10,7 @@ static auto addFittedText(
     juce::Justification justification
 )
 {
-    glyphs.addFittedText(
-        font,
-        text,
-        area.getX(),
-        area.getY(),
-        area.getWidth(),
-        area.getHeight(),
-        justification,
-        1
-    );
+    glyphs.addFittedText(font, text, area.getX(), area.getY(), area.getWidth(), area.getHeight(), justification, 1);
 }
 
 namespace mc {
@@ -178,7 +169,9 @@ auto BannerExamples::resized() -> void
 
 GridExamples::GridExamples()
 {
-    for (auto& thumbnail : _thumbnails) { addAndMakeVisible(thumbnail); }
+    for (auto& thumbnail : _thumbnails) {
+        addAndMakeVisible(thumbnail);
+    }
     _transition.keyframes(0.0F, 1.0F);
     _animation.onTick = [this] { layout(); };
 }
@@ -220,7 +213,9 @@ auto GridExamples::resized() -> void
     if (not isHorizontal) {
         grid.templateColumns = makeTracks(1);
         grid.templateRows    = makeTracks(5);
-        for (auto i{0U}; i < _thumbnails.size(); ++i) { grid.items.add(GridItem{proxies[i]}); }
+        for (auto i{0U}; i < _thumbnails.size(); ++i) {
+            grid.items.add(GridItem{proxies[i]});
+        }
     } else {
         grid.templateColumns = makeTracks(6);
         grid.templateRows    = makeTracks(2);
@@ -234,11 +229,15 @@ auto GridExamples::resized() -> void
     }
 
     grid.performLayout(getLocalBounds());
-    for (auto i{0U}; i < _thumbnails.size(); ++i) { _next[i] = proxies[i].getBounds(); }
+    for (auto i{0U}; i < _thumbnails.size(); ++i) {
+        _next[i] = proxies[i].getBounds();
+    }
 
     if (_isVertical != isHorizontal) {
         _isVertical = isHorizontal;
-        for (auto i{0U}; i < _thumbnails.size(); ++i) { _current[i] = _thumbnails[i].getBounds(); }
+        for (auto i{0U}; i < _thumbnails.size(); ++i) {
+            _current[i] = _thumbnails[i].getBounds();
+        }
         _animation.play();
     } else {
         layout();

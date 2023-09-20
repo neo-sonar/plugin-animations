@@ -19,12 +19,16 @@ struct MouseHoverListener final : juce::MouseListener
 private:
     auto mouseEnter(juce::MouseEvent const& /*event*/) -> void override
     {
-        if (onHoverEnter) { onHoverEnter(); }
+        if (onHoverEnter) {
+            onHoverEnter();
+        }
     }
 
     auto mouseExit(juce::MouseEvent const& /*event*/) -> void override
     {
-        if (onHoverExit) { onHoverExit(); }
+        if (onHoverExit) {
+            onHoverExit();
+        }
     }
 
     juce::Component* _component;

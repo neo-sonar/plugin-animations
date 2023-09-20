@@ -30,8 +30,12 @@ struct KeyframeProperty
     {
         jassert(_frames.size() >= 2);
 
-        if (t <= 0.0) { return _frames.front().value; }
-        if (t >= 1.0) { return _frames.back().value; }
+        if (t <= 0.0) {
+            return _frames.front().value;
+        }
+        if (t >= 1.0) {
+            return _frames.back().value;
+        }
 
         auto const cmp  = [](auto v, auto const& k) { return v < k.position; };
         auto const to   = std::upper_bound(begin(_frames), end(_frames), t, cmp);

@@ -69,7 +69,9 @@ private:
     {
         Content()
         {
-            for (auto& thumbnail : _thumbnails) { addAndMakeVisible(thumbnail); }
+            for (auto& thumbnail : _thumbnails) {
+                addAndMakeVisible(thumbnail);
+            }
             _move.keyframes(0.0F, 1.0F);
             _animation.onTick = [this] { layout(); };
         }

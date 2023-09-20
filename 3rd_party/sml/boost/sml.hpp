@@ -4,6 +4,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
+// clang-format off
 #ifndef BOOST_SML_HPP
 #define BOOST_SML_HPP
 #if (__cplusplus < 201305L && _MSC_VER < 1900)
@@ -2761,3 +2762,5 @@ BOOST_SML_NAMESPACE_END
 #endif
 #endif
 #endif
+
+// clang-format on

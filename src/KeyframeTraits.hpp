@@ -38,8 +38,7 @@ struct KeyframeTraits<juce::Colour>
 template<typename T>
 struct KeyframeTraits<juce::Rectangle<T>>
 {
-    [[nodiscard]] static auto
-    interpolate(juce::Rectangle<T> const& a, juce::Rectangle<T> const& b, double t)
+    [[nodiscard]] static auto interpolate(juce::Rectangle<T> const& a, juce::Rectangle<T> const& b, double t)
         -> juce::Rectangle<T>
     {
         if constexpr (std::is_floating_point_v<T>) {

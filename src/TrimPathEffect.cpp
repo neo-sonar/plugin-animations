@@ -2,10 +2,7 @@
 
 namespace mc {
 
-TrimPathEffect::TrimPathEffect(float start, float end) : _start{start}, _end{end}
-{
-    jassert(_start <= _end);
-}
+TrimPathEffect::TrimPathEffect(float start, float end) : _start{start}, _end{end} { jassert(_start <= _end); }
 
 auto TrimPathEffect::start(float newStart) -> void { _start = newStart; }
 
@@ -22,7 +19,9 @@ auto TrimPathEffect::operator()(juce::Path const& path) -> juce::Path
     auto iter      = juce::PathFlatteningIterator{path};
 
     while (iter.next()) {
-        if (lastStart >= endPos) { break; }
+        if (lastStart >= endPos) {
+            break;
+        }
 
         auto const line = juce::Line{iter.x1, iter.y1, iter.x2, iter.y2};
         auto const next = lastStart + line.getLength();

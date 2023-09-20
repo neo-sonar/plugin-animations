@@ -122,7 +122,9 @@ struct StateMachine
         };
 
         auto runTimeRemaining = [](Spec const& spec, Tick const& tick, Running const& running) {
-            if (spec.isLooping) { return true; }
+            if (spec.isLooping) {
+                return true;
+            }
             auto const delta = tick.now - running.start;
             return delta < spec.duration;
         };
@@ -141,9 +143,7 @@ struct StateMachine
 
 struct Timer
 {
-    explicit Timer(juce::Component* parent, bool isLooping = false)
-        : _spec{.isLooping = isLooping}
-        , _parent{parent}
+    explicit Timer(juce::Component* parent, bool isLooping = false) : _spec{.isLooping = isLooping}, _parent{parent}
     {
         _spec.onTick = [this] {
             jassert(this->onTick);
@@ -153,12 +153,20 @@ struct Timer
 
     [[nodiscard]] auto position() const -> double
     {
-        if (!_sm) { return 0.0; }
+        if (!_sm) {
+            return 0.0;
+        }
         using namespace boost::sml;
 
-        if (_sm->is(X)) { return 1.0; }
-        if (_sm->is(state<Idle>)) { return 0.0; }
-        if (_sm->is(state<Waiting>)) { return 0.0; }
+        if (_sm->is(X)) {
+            return 1.0;
+        }
+        if (_sm->is(state<Idle>)) {
+            return 0.0;
+        }
+        if (_sm->is(state<Waiting>)) {
+            return 0.0;
+        }
 
         if (_sm->is(state<Running>)) {
             namespace chrono = std::chrono;
@@ -188,7 +196,9 @@ struct Timer
 private:
     auto tick() -> void
     {
-        if (!_sm) { return; }
+        if (!_sm) {
+            return;
+        }
         _sm->process_event(Tick{.now = std::chrono::system_clock::now()});
     }
 

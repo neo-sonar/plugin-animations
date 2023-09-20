@@ -41,7 +41,9 @@ struct LoaderCarousel final : juce::Component
     {
         auto area        = getLocalBounds().toFloat();
         auto const width = area.getWidth() / static_cast<float>(_points.size());
-        for (auto& p : _points) { p = makeSquare(area.removeFromLeft(width)).reduced(2.0F); }
+        for (auto& p : _points) {
+            p = makeSquare(area.removeFromLeft(width)).reduced(2.0F);
+        }
 
         auto const last       = _points.back();
         auto const beforeLast = std::prev(_points.end(), 2);
