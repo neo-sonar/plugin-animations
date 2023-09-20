@@ -4,7 +4,7 @@
 
 #include <concepts>
 
-namespace mc {
+namespace neo {
 
 template<typename T>
 struct KeyframeTraits;
@@ -56,4 +56,4 @@ struct KeyframeTraits<juce::Rectangle<T>>
     }
 };
 
-}  // namespace mc
+}  // namespace neo

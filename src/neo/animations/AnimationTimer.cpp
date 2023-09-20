@@ -1,6 +1,6 @@
 #include "AnimationTimer.hpp"
 
-namespace mc {
+namespace neo {
 
 AnimationTimer::AnimationTimer(juce::Component* parent, bool isLooping) : _isLooping{isLooping}, _parent{parent} {}
 
@@ -66,4 +66,4 @@ auto AnimationTimer::tick() -> void
     jassertfalse;
 }
 
-}  // namespace mc
+}  // namespace neo

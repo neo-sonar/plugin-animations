@@ -6,7 +6,7 @@
 
 #include <span>
 
-namespace mc {
+namespace neo {
 
 template<typename T>
 struct TransitionProperty : KeyframeProperty<T>
@@ -40,4 +40,4 @@ private:
     Animation& _animation;
 };
 
-}  // namespace mc
+}  // namespace neo

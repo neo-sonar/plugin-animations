@@ -2,7 +2,7 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
-namespace mc {
+namespace neo {
 
 struct MouseHoverListener final : juce::MouseListener
 {
@@ -34,4 +34,4 @@ private:
     juce::Component* _component;
 };
 
-}  // namespace mc
+}  // namespace neo

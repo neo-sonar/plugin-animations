@@ -2,7 +2,7 @@
 
 #include "neo/animations/KeyframeTraits.hpp"
 
-namespace mc {
+namespace neo {
 
 template<typename T>
 struct Keyframe
@@ -17,4 +17,4 @@ Keyframe(T) -> Keyframe<T>;
 template<typename T>
 Keyframe(T, double) -> Keyframe<T>;
 
-}  // namespace mc
+}  // namespace neo

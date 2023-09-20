@@ -12,7 +12,7 @@ JUCE_BEGIN_IGNORE_WARNINGS_GCC_LIKE(
 #include <boost/sml.hpp>
 JUCE_END_IGNORE_WARNINGS_GCC_LIKE
 
-namespace mc {
+namespace neo {
 
 struct AnimationTimer
 {
@@ -221,4 +221,4 @@ private:
 
 }  // namespace v2
 
-}  // namespace mc
+}  // namespace neo

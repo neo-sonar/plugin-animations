@@ -4,7 +4,7 @@
 
 #include <span>
 
-namespace mc {
+namespace neo {
 
 template<typename T>
 struct KeyframeProperty
@@ -52,4 +52,4 @@ private:
     std::vector<Keyframe<T>> _frames{};
 };
 
-}  // namespace mc
+}  // namespace neo

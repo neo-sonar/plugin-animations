@@ -1,6 +1,6 @@
 #pragma once
 
-namespace mc {
+namespace neo {
 
 enum struct AnimationDirection
 {
@@ -10,4 +10,4 @@ enum struct AnimationDirection
     alternateReverse,
 };
 
-}  // namespace mc
+}  // namespace neo

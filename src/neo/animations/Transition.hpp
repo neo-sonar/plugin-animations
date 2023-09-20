@@ -5,7 +5,7 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
-namespace mc {
+namespace neo {
 
 struct TransitionSpec
 {
@@ -57,4 +57,4 @@ private:
     AnimationTimer _timer{_parent, false};
 };
 
-}  // namespace mc
+}  // namespace neo

@@ -13,7 +13,7 @@ static auto addFittedText(
     glyphs.addFittedText(font, text, area.getX(), area.getY(), area.getWidth(), area.getHeight(), justification, 1);
 }
 
-namespace mc {
+namespace neo {
 PathExamples::PathExamples()
 {
     _trim.keyframes(0.0F, 1.0F);
@@ -33,14 +33,14 @@ auto PathExamples::paint(juce::Graphics& g) -> void
     star.addStar(starArea.getCentre(), 24, 16.0F, 32.0F);
     star.applyTransform(star.getTransformToScaleToFit(starArea.reduced(8.0F), true));
     g.setColour(juce::Colours::red);
-    g.strokePath(mc::TrimPathEffect{_trim.get()}(star), juce::PathStrokeType{2.0F});
+    g.strokePath(neo::TrimPathEffect{_trim.get()}(star), juce::PathStrokeType{2.0F});
 
     // TEXT
     auto glyphs = juce::GlyphArrangement{};
     addFittedText(glyphs, juce::Font{54.0F}, "Submit", canvas, juce::Justification::centred);
     auto submit = juce::Path{};
     glyphs.createPath(submit);
-    g.strokePath(mc::TrimPathEffect{0.0, _trim.get()}(submit), juce::PathStrokeType{3.0F});
+    g.strokePath(neo::TrimPathEffect{0.0, _trim.get()}(submit), juce::PathStrokeType{3.0F});
 }
 
 TransitionExamples::TransitionExamples()
@@ -253,7 +253,7 @@ auto TabButton::paintButton(juce::Graphics& g, bool /*isHighlighted*/, bool /*is
     g.drawText(getButtonText(), getLocalBounds().toFloat(), juce::Justification::centred);
 }
 
-}  // namespace mc
+}  // namespace neo
 
 MainComponent::MainComponent()
 {
@@ -281,9 +281,9 @@ MainComponent::MainComponent()
 
         auto const expanded  = _prev->getBounds().getUnion(_next->getBounds());
         auto const keyframes = std::vector{
-            mc::Keyframe{_prev->getBounds(),  0.0},
-            mc::Keyframe{          expanded, 0.25},
-            mc::Keyframe{_next->getBounds(),  1.0},
+            neo::Keyframe{_prev->getBounds(),  0.0},
+            neo::Keyframe{          expanded, 0.25},
+            neo::Keyframe{_next->getBounds(),  1.0},
         };
         _expand.keyframes(keyframes);
         _animation.play();

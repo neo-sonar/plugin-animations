@@ -1,6 +1,6 @@
 #include "AnimatedButton.hpp"
 
-namespace mc {
+namespace neo {
 AnimatedButton::AnimatedButton(juce::String const& name) : Button{name}
 {
     _font.keyframes(1.0F, 2.0F);
@@ -30,4 +30,4 @@ auto AnimatedButton::resized() -> void
     _layout.keyframes(getLocalBounds().toFloat(), getLocalBounds().reduced(16, 4).toFloat());
 }
 
-}  // namespace mc
+}  // namespace neo

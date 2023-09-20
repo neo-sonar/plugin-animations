@@ -2,7 +2,7 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
-namespace mc {
+namespace neo {
 
 struct CubicInterpolation
 {
@@ -60,4 +60,4 @@ struct TimingFunction
     static constexpr auto EaseInOut     = [](double t) { return CubicInterpolation{}({0.42, 0.0}, {0.58, 1.0}, t).y; };
     static constexpr auto EaseInOutBack = [](double t) { return CubicInterpolation{}({0.68, -0.2}, {0.32, 1.2}, t).y; };
 };
-}  // namespace mc
+}  // namespace neo

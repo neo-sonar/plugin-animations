@@ -1,6 +1,6 @@
 #include "TrimPathEffect.hpp"
 
-namespace mc {
+namespace neo {
 
 TrimPathEffect::TrimPathEffect(float start, float end) : _start{start}, _end{end} { jassert(_start <= _end); }
 
@@ -46,4 +46,4 @@ auto TrimPathEffect::operator()(juce::Path const& path) -> juce::Path
 
     return out;
 }
-}  // namespace mc
+}  // namespace neo

@@ -6,7 +6,7 @@
 #include "neo/components/LoaderCarousel.hpp"
 #include "neo/components/TabSelector.hpp"
 
-namespace mc {
+namespace neo {
 struct PathExamples final : juce::Component
 {
     PathExamples();
@@ -122,7 +122,7 @@ struct TabButton final : juce::Button
     auto paintButton(juce::Graphics& g, bool isHighlighted, bool isDown) -> void override;
 };
 
-}  // namespace mc
+}  // namespace neo
 
 struct MainComponent final : juce::Component
 {
@@ -133,32 +133,32 @@ struct MainComponent final : juce::Component
     auto resized() -> void override;
 
 private:
-    static auto makeAnimation() -> mc::AnimationSpec
+    static auto makeAnimation() -> neo::AnimationSpec
     {
         return {
             .duration       = std::chrono::milliseconds{600},
             .delay          = std::chrono::milliseconds{0},
-            .timingFunction = mc::TimingFunction::EaseInOut,
+            .timingFunction = neo::TimingFunction::EaseInOut,
         };
     }
 
-    mc::Animation _animation{this, makeAnimation()};
-    mc::AnimationProperty<juce::Rectangle<int>> _expand{_animation};
+    neo::Animation _animation{this, makeAnimation()};
+    neo::AnimationProperty<juce::Rectangle<int>> _expand{_animation};
 
     juce::Button* _prev{nullptr};
     juce::Button* _next{nullptr};
 
-    mc::TabButton _pathToggle{"path"};
-    mc::TabButton _transitionToggle{"transition"};
-    mc::TabButton _widgetsToggle{"widgets"};
-    mc::TabButton _bannersToggle{"banners"};
-    mc::TabButton _gridsToggle{"grids"};
+    neo::TabButton _pathToggle{"path"};
+    neo::TabButton _transitionToggle{"transition"};
+    neo::TabButton _widgetsToggle{"widgets"};
+    neo::TabButton _bannersToggle{"banners"};
+    neo::TabButton _gridsToggle{"grids"};
 
-    mc::PathExamples _path{};
-    mc::TransitionExamples _transition{};
-    mc::WidgetsExamples _widgets{};
-    mc::BannerExamples _banners{};
-    mc::GridExamples _grids{};
+    neo::PathExamples _path{};
+    neo::TransitionExamples _transition{};
+    neo::WidgetsExamples _widgets{};
+    neo::BannerExamples _banners{};
+    neo::GridExamples _grids{};
 
-    mc::TabSelector _tabs;
+    neo::TabSelector _tabs;
 };

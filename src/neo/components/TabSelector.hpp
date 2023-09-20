@@ -2,7 +2,7 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
-namespace mc {
+namespace neo {
 
 struct TabSelectorItemSpec
 {
@@ -31,4 +31,4 @@ private:
     std::optional<ItemSpec> _selected;
 };
 
-}  // namespace mc
+}  // namespace neo

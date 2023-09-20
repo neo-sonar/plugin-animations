@@ -2,7 +2,7 @@
 
 #include <juce_graphics/juce_graphics.h>
 
-namespace mc {
+namespace neo {
 
 struct TrimPathEffect
 {
@@ -19,4 +19,4 @@ private:
     float _end{0};
 };
 
-}  // namespace mc
+}  // namespace neo

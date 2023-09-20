@@ -3,7 +3,7 @@
 #include "neo/animations/TimingFunction.hpp"
 #include "neo/components/AnimatedButton.hpp"
 
-namespace mc {
+namespace neo {
 
 struct Thumbnail final : juce::Component
 {
@@ -172,4 +172,4 @@ private:
     juce::Viewport _viewport;
 };
 
-}  // namespace mc
+}  // namespace neo

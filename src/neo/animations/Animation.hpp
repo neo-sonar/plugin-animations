@@ -5,7 +5,7 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
-namespace mc {
+namespace neo {
 
 struct AnimationSpec
 {
@@ -57,4 +57,4 @@ private:
     v2::Timer _timer{_parent, _spec.isLooping};
 };
 
-}  // namespace mc
+}  // namespace neo

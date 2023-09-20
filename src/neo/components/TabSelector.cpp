@@ -1,6 +1,6 @@
 #include "TabSelector.hpp"
 
-namespace mc {
+namespace neo {
 
 TabSelector::~TabSelector()
 {
@@ -42,4 +42,4 @@ auto TabSelector::setContentBounds(juce::Rectangle<int> bounds) -> void
 {
     std::for_each(begin(_items), end(_items), [bounds](ItemSpec& item) { item.content->setBounds(bounds); });
 }
-}  // namespace mc
+}  // namespace neo

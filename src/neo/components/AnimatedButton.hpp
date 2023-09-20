@@ -6,7 +6,7 @@
 
 #include <juce_gui_extra/juce_gui_extra.h>
 
-namespace mc {
+namespace neo {
 struct AnimatedButton final : juce::Button
 {
     explicit AnimatedButton(juce::String const& name);
@@ -25,4 +25,4 @@ private:
 
     MouseHoverListener _hoverListener{this};
 };
-}  // namespace mc
+}  // namespace neo

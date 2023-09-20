@@ -5,7 +5,7 @@
 
 #include <span>
 
-namespace mc {
+namespace neo {
 
 inline constexpr auto makeSquare = []<typename T>(juce::Rectangle<T> const& rect) {
     auto const size = std::min(rect.getWidth(), rect.getHeight());
@@ -67,4 +67,4 @@ private:
     std::array<juce::Rectangle<float>, NumPoints> _points{};
 };
 
-}  // namespace mc
+}  // namespace neo
