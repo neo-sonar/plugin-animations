@@ -11,16 +11,16 @@ struct KeyframeProperty
 {
     KeyframeProperty() = default;
 
-    KeyframeProperty(T const& from, T const& to) { keyframes(from, to); }
+    KeyframeProperty(T const& from, T const& to) { setKeyframes(from, to); }
 
-    auto keyframes(T const& from, T const& to) -> void
+    auto setKeyframes(T const& from, T const& to) -> void
     {
         _frames.clear();
-        _frames.push_back(Keyframe<T>{from, 0.0});
-        _frames.push_back(Keyframe<T>{to, 1.0});
+        _frames.push_back(Keyframe{from, 0.0});
+        _frames.push_back(Keyframe{to, 1.0});
     }
 
-    auto keyframes(std::span<Keyframe<T> const> frames) -> void
+    auto setKeyframes(std::span<Keyframe<T> const> frames) -> void
     {
         _frames.resize(frames.size());
         std::copy(frames.begin(), frames.end(), _frames.begin());

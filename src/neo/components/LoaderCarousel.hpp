@@ -48,7 +48,7 @@ struct LoaderCarousel final : juce::Component
         auto const last       = _points.back();
         auto const beforeLast = std::prev(_points.end(), 2);
         auto const distance   = last.getCentreX() - beforeLast->getCentreX();
-        _translate.keyframes(0.0F, distance);
+        _translate.setKeyframes(0.0F, distance);
     }
 
 private:

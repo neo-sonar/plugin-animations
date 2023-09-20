@@ -4,11 +4,11 @@ namespace neo {
 
 AnimationTimer::AnimationTimer(juce::Component* parent, bool isLooping) : _isLooping{isLooping}, _parent{parent} {}
 
-auto AnimationTimer::duration(std::chrono::milliseconds ms) -> void { _duration = ms; }
+auto AnimationTimer::setDuration(std::chrono::milliseconds ms) -> void { _duration = ms; }
 
-auto AnimationTimer::delay(std::chrono::milliseconds ms) -> void { _delay = ms; }
+auto AnimationTimer::setDelay(std::chrono::milliseconds ms) -> void { _delay = ms; }
 
-[[nodiscard]] auto AnimationTimer::position() const -> double { return _position; }
+[[nodiscard]] auto AnimationTimer::getPosition() const -> double { return _position; }
 
 auto AnimationTimer::play(AnimationDirection dir) -> void
 {

@@ -3,12 +3,12 @@
 namespace neo {
 AnimatedButton::AnimatedButton(juce::String const& name) : Button{name}
 {
-    _font.keyframes(1.0F, 2.0F);
-    _corner.keyframes(0.0F, 8.0F);
-    _backgroundColor.keyframes(juce::Colours::white, juce::Colours::green);
-    _textColor.keyframes(juce::Colours::black, juce::Colours::white);
+    _font.setKeyframes(1.0F, 2.0F);
+    _corner.setKeyframes(0.0F, 8.0F);
+    _backgroundColor.setKeyframes(juce::Colours::white, juce::Colours::green);
+    _textColor.setKeyframes(juce::Colours::black, juce::Colours::white);
 
-    _transition.duration(std::chrono::milliseconds{400});
+    _transition.setDuration(std::chrono::milliseconds{400});
     _hoverListener.onHoverEnter = [this] { _transition.forward(); };
     _hoverListener.onHoverExit  = [this] { _transition.backward(); };
 }
@@ -27,7 +27,7 @@ auto AnimatedButton::paintButton(juce::Graphics& g, bool /*isHighlighted*/, bool
 
 auto AnimatedButton::resized() -> void
 {
-    _layout.keyframes(getLocalBounds().toFloat(), getLocalBounds().reduced(16, 4).toFloat());
+    _layout.setKeyframes(getLocalBounds().toFloat(), getLocalBounds().reduced(16, 4).toFloat());
 }
 
 }  // namespace neo

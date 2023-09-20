@@ -10,10 +10,10 @@ struct AnimationTimer
 {
     explicit AnimationTimer(juce::Component* parent, bool isLooping = false);
 
-    [[nodiscard]] auto position() const -> double;
+    [[nodiscard]] auto getPosition() const -> double;
 
-    auto duration(std::chrono::milliseconds ms) -> void;
-    auto delay(std::chrono::milliseconds ms) -> void;
+    auto setDuration(std::chrono::milliseconds ms) -> void;
+    auto setDelay(std::chrono::milliseconds ms) -> void;
 
     auto play(AnimationDirection dir) -> void;
 

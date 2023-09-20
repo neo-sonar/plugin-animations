@@ -16,7 +16,7 @@ static auto addFittedText(
 namespace neo {
 PathExamples::PathExamples()
 {
-    _trim.keyframes(0.0F, 1.0F);
+    _trim.setKeyframes(0.0F, 1.0F);
     _animation.play();
 }
 
@@ -57,11 +57,11 @@ TransitionExamples::TransitionExamples()
         1
     );
 
-    _trim.keyframes(0.0F, 1.0F);
+    _trim.setKeyframes(0.0F, 1.0F);
 
     _duration.onValueChange = [this] {
         auto const ms = std::chrono::milliseconds{static_cast<int>(_duration.getValue())};
-        _tran.duration(ms);
+        _tran.setDuration(ms);
     };
     _duration.setRange(100.0, 10000.0, 1.0);
     _duration.setValue(2000.0);
@@ -172,7 +172,7 @@ GridExamples::GridExamples()
     for (auto& thumbnail : _thumbnails) {
         addAndMakeVisible(thumbnail);
     }
-    _transition.keyframes(0.0F, 1.0F);
+    _transition.setKeyframes(0.0F, 1.0F);
     _animation.onTick = [this] { layout(); };
 }
 
@@ -257,7 +257,7 @@ auto TabButton::paintButton(juce::Graphics& g, bool /*isHighlighted*/, bool /*is
 
 MainComponent::MainComponent()
 {
-    // _expand.keyframes(0.0F, 1.0F);
+    // _expand.setKeyframes(0.0F, 1.0F);
 
     addAndMakeVisible(_pathToggle);
     addAndMakeVisible(_transitionToggle);
@@ -285,7 +285,7 @@ MainComponent::MainComponent()
             neo::Keyframe{          expanded, 0.25},
             neo::Keyframe{_next->getBounds(),  1.0},
         };
-        _expand.keyframes(keyframes);
+        _expand.setKeyframes(keyframes);
         _animation.play();
     };
     _tabs.selectFirstTab();
@@ -334,5 +334,5 @@ auto MainComponent::resized() -> void
     grid.performLayout(controls);
 
     _tabs.setContentBounds(area.reduced(4));
-    _expand.keyframes(_prev->getBounds(), _next->getBounds());
+    _expand.setKeyframes(_prev->getBounds(), _next->getBounds());
 }

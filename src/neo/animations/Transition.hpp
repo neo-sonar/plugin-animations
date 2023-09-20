@@ -20,8 +20,8 @@ struct Transition
     {
         jassert(_parent != nullptr);
 
-        duration(_spec.duration);
-        delay(_spec.delay);
+        setDuration(_spec.duration);
+        setDelay(_spec.delay);
 
         onTick        = [this] { _parent->repaint(); };
         _timer.onTick = [this] {
@@ -31,22 +31,22 @@ struct Transition
         };
     }
 
-    [[nodiscard]] auto position() const -> double { return _spec.timingFunction(_timer.position()); }
-
     auto forward() -> void { _timer.play(AnimationDirection::normal); }
 
     auto backward() -> void { _timer.play(AnimationDirection::reverse); }
 
-    auto duration(std::chrono::milliseconds ms) -> void
+    [[nodiscard]] auto getPosition() const -> double { return _spec.timingFunction(_timer.getPosition()); }
+
+    auto setDuration(std::chrono::milliseconds ms) -> void
     {
         _spec.duration = ms;
-        _timer.duration(ms);
+        _timer.setDuration(ms);
     }
 
-    auto delay(std::chrono::milliseconds ms) -> void
+    auto setDelay(std::chrono::milliseconds ms) -> void
     {
         _spec.delay = ms;
-        _timer.delay(ms);
+        _timer.setDelay(ms);
     }
 
     std::function<void()> onTick;

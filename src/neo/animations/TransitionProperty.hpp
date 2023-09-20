@@ -18,7 +18,7 @@ struct TransitionProperty : KeyframeProperty<T>
         , _transition{transition}
     {}
 
-    [[nodiscard]] auto get() const -> T { return KeyframeProperty<T>::get(_transition.position()); }
+    [[nodiscard]] auto get() const -> T { return KeyframeProperty<T>::get(_transition.getPosition()); }
 
 private:
     Transition& _transition;
@@ -34,7 +34,7 @@ struct AnimationProperty : KeyframeProperty<T>
         , _animation{animation}
     {}
 
-    [[nodiscard]] auto get() const -> T { return KeyframeProperty<T>::get(_animation.position()); }
+    [[nodiscard]] auto get() const -> T { return KeyframeProperty<T>::get(_animation.getPosition()); }
 
 private:
     Animation& _animation;
