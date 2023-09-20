@@ -1,7 +1,7 @@
 #pragma once
 
-#include "AnimationTimer.hpp"
-#include "TimingFunction.hpp"
+#include "animation/AnimationTimer.hpp"
+#include "animation/TimingFunction.hpp"
 
 #include <juce_gui_basics/juce_gui_basics.h>
 

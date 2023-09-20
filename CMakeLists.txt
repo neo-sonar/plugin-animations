@@ -30,25 +30,26 @@ target_sources(AnimationDemo
     PRIVATE
         "src/AnimatedButton.cpp"
         "src/AnimatedButton.hpp"
-        "src/Animation.hpp"
-        "src/AnimationDirection.hpp"
-        "src/AnimationTimer.hpp"
-        "src/AnimationTimer.cpp"
         "src/BannerCarousel.hpp"
-        "src/Keyframe.hpp"
-        "src/KeyframeProperty.hpp"
-        "src/KeyframeTraits.hpp"
         "src/Main.cpp"
         "src/MainComponent.hpp"
         "src/MainComponent.cpp"
         "src/MouseHoverListener.hpp"
         "src/TabSelector.hpp"
         "src/TabSelector.cpp"
-        "src/TimingFunction.hpp"
-        "src/Transition.hpp"
-        "src/TransitionProperty.hpp"
         "src/TrimPathEffect.hpp"
         "src/TrimPathEffect.cpp"
+        
+        "src/animation/Animation.hpp"
+        "src/animation/AnimationDirection.hpp"
+        "src/animation/AnimationTimer.hpp"
+        "src/animation/AnimationTimer.cpp"
+        "src/animation/Keyframe.hpp"
+        "src/animation/KeyframeProperty.hpp"
+        "src/animation/KeyframeTraits.hpp"
+        "src/animation/TimingFunction.hpp"
+        "src/animation/Transition.hpp"
+        "src/animation/TransitionProperty.hpp"
 )
 
 target_compile_definitions(AnimationDemo
@@ -57,6 +58,11 @@ target_compile_definitions(AnimationDemo
         JUCE_USE_CURL=0
         JUCE_APPLICATION_NAME_STRING="$<TARGET_PROPERTY:AnimationDemo,JUCE_PRODUCT_NAME>"
         JUCE_APPLICATION_VERSION_STRING="$<TARGET_PROPERTY:AnimationDemo,JUCE_VERSION>"
+)
+
+target_include_directories(AnimationDemo
+    PUBLIC
+        ${PROJECT_SOURCE_DIR}/src
 )
 
 

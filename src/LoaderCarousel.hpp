@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AnimatedButton.hpp"
-#include "Animation.hpp"
+#include "animation/Animation.hpp"
 
 #include <span>
 

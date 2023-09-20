@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Animation.hpp"
-#include "KeyframeProperty.hpp"
-#include "Transition.hpp"
+#include "animation/Animation.hpp"
+#include "animation/KeyframeProperty.hpp"
+#include "animation/Transition.hpp"
 
 #include <span>
 

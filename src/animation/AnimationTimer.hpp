@@ -1,9 +1,16 @@
 #pragma once
 
-#include "AnimationDirection.hpp"
+#include "animation/AnimationDirection.hpp"
 
-#include <boost/sml.hpp>
 #include <juce_gui_basics/juce_gui_basics.h>
+
+JUCE_BEGIN_IGNORE_WARNINGS_GCC_LIKE(
+    "-Wshadow-field",
+    "-Wshadow-field-in-constructor",
+    "-Wzero-as-null-pointer-constant"
+)
+#include <boost/sml.hpp>
+JUCE_END_IGNORE_WARNINGS_GCC_LIKE
 
 namespace mc {
 

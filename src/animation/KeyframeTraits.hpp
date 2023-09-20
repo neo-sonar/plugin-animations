@@ -1,7 +1,8 @@
 #pragma once
 
-#include <concepts>
 #include <juce_graphics/juce_graphics.h>
+
+#include <concepts>
 
 namespace mc {
 

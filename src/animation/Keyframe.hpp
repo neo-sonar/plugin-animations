@@ -1,6 +1,6 @@
 #pragma once
 
-#include "KeyframeTraits.hpp"
+#include "animation/KeyframeTraits.hpp"
 
 namespace mc {
 

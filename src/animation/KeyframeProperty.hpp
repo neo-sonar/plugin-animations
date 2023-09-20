@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Keyframe.hpp"
+#include "animation/Keyframe.hpp"
 
 #include <span>
 

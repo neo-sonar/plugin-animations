@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AnimatedButton.hpp"
-#include "TimingFunction.hpp"
+#include "animation/TimingFunction.hpp"
 
 namespace mc {
 
