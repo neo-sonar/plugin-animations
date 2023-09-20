@@ -4,7 +4,7 @@
 #include "BannerCarousel.hpp"
 #include "LoaderCarousel.hpp"
 #include "TabSelector.hpp"
-#include "animation/TransitionProperty.hpp"
+#include "neo/animations/TransitionProperty.hpp"
 
 namespace mc {
 struct PathExamples final : juce::Component

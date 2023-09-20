@@ -1,6 +1,6 @@
 #pragma once
 
-#include "animation/AnimationDirection.hpp"
+#include "neo/animations/AnimationDirection.hpp"
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
