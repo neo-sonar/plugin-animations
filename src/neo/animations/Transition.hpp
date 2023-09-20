@@ -60,17 +60,17 @@ private:
     KeyframeTimer _timer{_parent, false};
 };
 
-template<typename T>
-struct TransitionProperty : KeyframeProperty<T>
+template<typename T, typename Interpolator = KeyframeInterpolator<T>>
+struct TransitionProperty : KeyframeProperty<T, Interpolator>
 {
     explicit TransitionProperty(Transition& transition) : TransitionProperty{transition, {}, {}} {}
 
     TransitionProperty(Transition& transition, T const& from, T const& to)
-        : KeyframeProperty<T>{from, to}
+        : KeyframeProperty<T, Interpolator>{from, to}
         , _transition{transition}
     {}
 
-    [[nodiscard]] auto get() const -> T { return KeyframeProperty<T>::get(_transition.getPosition()); }
+    [[nodiscard]] auto get() const -> T { return KeyframeProperty<T, Interpolator>::get(_transition.getPosition()); }
 
 private:
     Transition& _transition;

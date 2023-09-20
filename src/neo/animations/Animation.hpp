@@ -37,17 +37,17 @@ private:
     KeyframeTimer _timer{_parent, _spec.isLooping};
 };
 
-template<typename T>
-struct AnimationProperty : KeyframeProperty<T>
+template<typename T, typename Interpolator = KeyframeInterpolator<T>>
+struct AnimationProperty : KeyframeProperty<T, Interpolator>
 {
     explicit AnimationProperty(Animation& animation) : AnimationProperty{animation, {}, {}} {}
 
     AnimationProperty(Animation& animation, T const& from, T const& to)
-        : KeyframeProperty<T>{from, to}
+        : KeyframeProperty<T, Interpolator>{from, to}
         , _animation{animation}
     {}
 
-    [[nodiscard]] auto get() const -> T { return KeyframeProperty<T>::get(_animation.getPosition()); }
+    [[nodiscard]] auto get() const -> T { return KeyframeProperty<T, Interpolator>::get(_animation.getPosition()); }
 
 private:
     Animation& _animation;

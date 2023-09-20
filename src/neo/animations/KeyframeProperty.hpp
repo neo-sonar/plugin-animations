@@ -19,7 +19,7 @@ Keyframe(T) -> Keyframe<T>;
 template<typename T>
 Keyframe(T, double) -> Keyframe<T>;
 
-template<typename T>
+template<typename T, typename Interpolator = KeyframeInterpolator<T>>
 struct KeyframeProperty
 {
     KeyframeProperty() = default;
@@ -32,31 +32,32 @@ struct KeyframeProperty
 
 private:
     std::vector<Keyframe<T>> _frames{};
+    Interpolator _interpolator{};
 };
 
-template<typename T>
-KeyframeProperty<T>::KeyframeProperty(T const& from, T const& to)
+template<typename T, typename Interpolator>
+KeyframeProperty<T, Interpolator>::KeyframeProperty(T const& from, T const& to)
 {
     setKeyframes(from, to);
 }
 
-template<typename T>
-auto KeyframeProperty<T>::setKeyframes(T const& from, T const& to) -> void
+template<typename T, typename Interpolator>
+auto KeyframeProperty<T, Interpolator>::setKeyframes(T const& from, T const& to) -> void
 {
     _frames.clear();
     _frames.push_back(Keyframe{from, 0.0});
     _frames.push_back(Keyframe{to, 1.0});
 }
 
-template<typename T>
-auto KeyframeProperty<T>::setKeyframes(std::span<Keyframe<T> const> frames) -> void
+template<typename T, typename Interpolator>
+auto KeyframeProperty<T, Interpolator>::setKeyframes(std::span<Keyframe<T> const> frames) -> void
 {
     _frames.resize(frames.size());
     std::copy(frames.begin(), frames.end(), _frames.begin());
 }
 
-template<typename T>
-auto KeyframeProperty<T>::get(double t) const -> T
+template<typename T, typename Interpolator>
+auto KeyframeProperty<T, Interpolator>::get(double t) const -> T
 {
     jassert(_frames.size() >= 2);
 
@@ -75,7 +76,7 @@ auto KeyframeProperty<T>::get(double t) const -> T
     jassert(to != _frames.end());
 
     auto const pos = (t - from->position) / (to->position - from->position);
-    return KeyframeInterpolator<T>{}(from->value, to->value, pos);
+    return _interpolator(from->value, to->value, pos);
 }
 
 }  // namespace neo

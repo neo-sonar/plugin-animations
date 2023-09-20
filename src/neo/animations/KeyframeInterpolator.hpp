@@ -12,19 +12,25 @@ struct KeyframeInterpolator;
 template<std::integral T>
 struct KeyframeInterpolator<T>
 {
-    [[nodiscard]] constexpr auto operator()(T a, T b, double t) -> T { return static_cast<T>(std::lerp(a, b, t)); }
+    [[nodiscard]] constexpr auto operator()(T a, T b, double t) const -> T
+    {
+        return static_cast<T>(std::lerp(a, b, t));
+    }
 };
 
 template<std::floating_point T>
 struct KeyframeInterpolator<T>
 {
-    [[nodiscard]] constexpr auto operator()(T a, T b, double t) -> T { return std::lerp(a, b, static_cast<T>(t)); }
+    [[nodiscard]] constexpr auto operator()(T a, T b, double t) const -> T
+    {
+        return std::lerp(a, b, static_cast<T>(t));
+    }
 };
 
 template<>
 struct KeyframeInterpolator<juce::Colour>
 {
-    [[nodiscard]] auto operator()(juce::Colour a, juce::Colour b, double t) -> juce::Colour
+    [[nodiscard]] auto operator()(juce::Colour a, juce::Colour b, double t) const -> juce::Colour
     {
         return a.interpolatedWith(b, static_cast<float>(t));
     }
@@ -33,7 +39,7 @@ struct KeyframeInterpolator<juce::Colour>
 template<typename T>
 struct KeyframeInterpolator<juce::Rectangle<T>>
 {
-    [[nodiscard]] auto operator()(juce::Rectangle<T> const& a, juce::Rectangle<T> const& b, double t)
+    [[nodiscard]] auto operator()(juce::Rectangle<T> const& a, juce::Rectangle<T> const& b, double t) const
         -> juce::Rectangle<T>
     {
         if constexpr (std::is_floating_point_v<T>) {
