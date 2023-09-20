@@ -1,6 +1,6 @@
 #include "MainComponent.hpp"
 
-#include "TrimPathEffect.hpp"
+#include "neo/graphics/TrimPathEffect.hpp"
 
 static auto addFittedText(
     juce::GlyphArrangement& glyphs,

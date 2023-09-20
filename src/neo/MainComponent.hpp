@@ -1,10 +1,10 @@
 #pragma once
 
-#include "AnimatedButton.hpp"
-#include "BannerCarousel.hpp"
-#include "LoaderCarousel.hpp"
-#include "TabSelector.hpp"
 #include "neo/animations/TransitionProperty.hpp"
+#include "neo/components/AnimatedButton.hpp"
+#include "neo/components/BannerCarousel.hpp"
+#include "neo/components/LoaderCarousel.hpp"
+#include "neo/components/TabSelector.hpp"
 
 namespace mc {
 struct PathExamples final : juce::Component

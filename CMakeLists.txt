@@ -28,17 +28,9 @@ juce_add_gui_app(AnimationDemo PRODUCT_NAME "Animation Demo")
 
 target_sources(AnimationDemo
     PRIVATE
-        "src/neo/AnimatedButton.cpp"
-        "src/neo/AnimatedButton.hpp"
-        "src/neo/BannerCarousel.hpp"
         "src/neo/Main.cpp"
         "src/neo/MainComponent.hpp"
         "src/neo/MainComponent.cpp"
-        "src/neo/MouseHoverListener.hpp"
-        "src/neo/TabSelector.hpp"
-        "src/neo/TabSelector.cpp"
-        "src/neo/TrimPathEffect.hpp"
-        "src/neo/TrimPathEffect.cpp"
 
         "src/neo/animations/Animation.hpp"
         "src/neo/animations/AnimationDirection.hpp"
@@ -50,6 +42,17 @@ target_sources(AnimationDemo
         "src/neo/animations/TimingFunction.hpp"
         "src/neo/animations/Transition.hpp"
         "src/neo/animations/TransitionProperty.hpp"
+
+        "src/neo/components/AnimatedButton.cpp"
+        "src/neo/components/AnimatedButton.hpp"
+        "src/neo/components/BannerCarousel.hpp"
+        "src/neo/components/LoaderCarousel.hpp"
+        "src/neo/components/MouseHoverListener.hpp"
+        "src/neo/components/TabSelector.hpp"
+        "src/neo/components/TabSelector.cpp"
+
+        "src/neo/graphics/TrimPathEffect.hpp"
+        "src/neo/graphics/TrimPathEffect.cpp"
 )
 
 target_compile_definitions(AnimationDemo

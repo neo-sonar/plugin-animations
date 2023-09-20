@@ -1,7 +1,7 @@
 #pragma once
 
-#include "AnimatedButton.hpp"
 #include "neo/animations/Animation.hpp"
+#include "neo/components/AnimatedButton.hpp"
 
 #include <span>
 

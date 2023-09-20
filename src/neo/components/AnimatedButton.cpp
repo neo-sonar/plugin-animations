@@ -1,4 +1,4 @@
-#include "MainComponent.hpp"
+#include "AnimatedButton.hpp"
 
 namespace mc {
 AnimatedButton::AnimatedButton(juce::String const& name) : Button{name}
