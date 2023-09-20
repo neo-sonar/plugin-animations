@@ -1,59 +1,37 @@
 #pragma once
 
-#include "neo/animations/AnimationTimer.hpp"
+#include "neo/animations/KeyframeTimer.hpp"
 #include "neo/animations/TimingFunction.hpp"
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
 namespace neo {
 
-struct AnimationSpec
-{
-    std::chrono::milliseconds duration{600};
-    std::chrono::milliseconds delay{0};
-    bool isLooping{false};
-    std::function<double(double)> timingFunction{TimingFunction::Linear};
-};
-
 struct Animation
 {
-    explicit Animation(juce::Component* parent, AnimationSpec const& spec = {}) : _parent{parent}, _spec{spec}
+    struct Spec
     {
-        jassert(_parent != nullptr);
+        std::chrono::milliseconds duration{600};
+        std::chrono::milliseconds delay{0};
+        bool isLooping{false};
+        std::function<double(double)> timingFunction{TimingFunction::Linear};
+    };
 
-        setDuration(_spec.duration);
-        setDelay(_spec.delay);
+    explicit Animation(juce::Component* parent, Spec spec);
 
-        onTick        = [this] { _parent->repaint(); };
-        _timer.onTick = [this] {
-            if (this->onTick) {
-                this->onTick();
-            }
-        };
-    }
+    auto play(KeyframeTimer::Direction direction = KeyframeTimer::Direction::normal) -> void;
 
-    auto setDuration(std::chrono::milliseconds ms) -> void
-    {
-        _spec.duration = ms;
-        _timer.setDuration(ms);
-    }
+    auto setDuration(std::chrono::milliseconds ms) -> void;
+    auto setDelay(std::chrono::milliseconds ms) -> void;
 
-    auto setDelay(std::chrono::milliseconds ms) -> void
-    {
-        _spec.delay = ms;
-        _timer.setDelay(ms);
-    }
-
-    auto play(AnimationDirection direction = AnimationDirection::normal) -> void { _timer.play(direction); }
-
-    [[nodiscard]] auto getPosition() const -> double { return _spec.timingFunction(_timer.getPosition()); }
+    [[nodiscard]] auto getPosition() const -> double;
 
     std::function<void()> onTick;
 
 private:
     juce::Component* _parent{nullptr};
-    AnimationSpec _spec;
-    AnimationTimer _timer{_parent, _spec.isLooping};
+    Spec _spec;
+    KeyframeTimer _timer{_parent, _spec.isLooping};
 };
 
 }  // namespace neo

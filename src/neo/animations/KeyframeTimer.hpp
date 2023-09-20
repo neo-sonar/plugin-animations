@@ -1,21 +1,27 @@
 #pragma once
 
-#include "neo/animations/AnimationDirection.hpp"
-
 #include <juce_gui_basics/juce_gui_basics.h>
 
 namespace neo {
 
-struct AnimationTimer
+struct KeyframeTimer
 {
-    explicit AnimationTimer(juce::Component* parent, bool isLooping = false);
+    enum struct Direction
+    {
+        normal,
+        reverse,
+        alternate,
+        alternateReverse,
+    };
 
-    [[nodiscard]] auto getPosition() const -> double;
+    explicit KeyframeTimer(juce::Component* parent, bool isLooping = false);
+
+    auto play(Direction dir) -> void;
 
     auto setDuration(std::chrono::milliseconds ms) -> void;
     auto setDelay(std::chrono::milliseconds ms) -> void;
 
-    auto play(AnimationDirection dir) -> void;
+    [[nodiscard]] auto getPosition() const -> double;
 
     std::function<void()> onTick;
 
@@ -30,7 +36,7 @@ private:
     auto tick() -> void;
 
     bool _isLooping;
-    AnimationDirection _direction{AnimationDirection::normal};
+    Direction _direction{Direction::normal};
     State _state{State::Idle};
     double _position{0.0};
 

@@ -145,7 +145,7 @@ private:
         }
 
     private:
-        static auto makeAnimation() -> AnimationSpec
+        [[nodiscard]] static auto makeAnimation() -> Animation::Spec
         {
             return {
                 .duration       = std::chrono::milliseconds{600},

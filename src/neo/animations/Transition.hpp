@@ -1,22 +1,22 @@
 #pragma once
 
-#include "neo/animations/AnimationTimer.hpp"
+#include "neo/animations/KeyframeTimer.hpp"
 #include "neo/animations/TimingFunction.hpp"
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
 namespace neo {
 
-struct TransitionSpec
-{
-    std::chrono::milliseconds duration{600};
-    std::chrono::milliseconds delay{0};
-    std::function<double(double)> timingFunction{TimingFunction::Linear};
-};
-
 struct Transition
 {
-    explicit Transition(juce::Component* parent, TransitionSpec const& spec = {}) : _parent{parent}, _spec{spec}
+    struct Spec
+    {
+        std::chrono::milliseconds duration{600};
+        std::chrono::milliseconds delay{0};
+        std::function<double(double)> timingFunction{TimingFunction::Linear};
+    };
+
+    explicit Transition(juce::Component* parent, Spec spec) : _parent{parent}, _spec{std::move(spec)}
     {
         jassert(_parent != nullptr);
 
@@ -31,9 +31,9 @@ struct Transition
         };
     }
 
-    auto forward() -> void { _timer.play(AnimationDirection::normal); }
+    auto forward() -> void { _timer.play(KeyframeTimer::Direction::normal); }
 
-    auto backward() -> void { _timer.play(AnimationDirection::reverse); }
+    auto backward() -> void { _timer.play(KeyframeTimer::Direction::reverse); }
 
     [[nodiscard]] auto getPosition() const -> double { return _spec.timingFunction(_timer.getPosition()); }
 
@@ -53,8 +53,8 @@ struct Transition
 
 private:
     juce::Component* _parent{nullptr};
-    TransitionSpec _spec;
-    AnimationTimer _timer{_parent, false};
+    Spec _spec;
+    KeyframeTimer _timer{_parent, false};
 };
 
 }  // namespace neo

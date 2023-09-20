@@ -16,7 +16,7 @@ struct AnimatedButton final : juce::Button
     auto resized() -> void override;
 
 private:
-    Transition _transition{this};
+    Transition _transition{this, Transition::Spec{}};
     TransitionProperty<float> _font{_transition};
     TransitionProperty<float> _corner{_transition};
     TransitionProperty<juce::Rectangle<float>> _layout{_transition};

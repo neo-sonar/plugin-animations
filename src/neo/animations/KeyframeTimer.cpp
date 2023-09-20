@@ -1,16 +1,16 @@
-#include "AnimationTimer.hpp"
+#include "KeyframeTimer.hpp"
 
 namespace neo {
 
-AnimationTimer::AnimationTimer(juce::Component* parent, bool isLooping) : _isLooping{isLooping}, _parent{parent} {}
+KeyframeTimer::KeyframeTimer(juce::Component* parent, bool isLooping) : _isLooping{isLooping}, _parent{parent} {}
 
-auto AnimationTimer::setDuration(std::chrono::milliseconds ms) -> void { _duration = ms; }
+auto KeyframeTimer::setDuration(std::chrono::milliseconds ms) -> void { _duration = ms; }
 
-auto AnimationTimer::setDelay(std::chrono::milliseconds ms) -> void { _delay = ms; }
+auto KeyframeTimer::setDelay(std::chrono::milliseconds ms) -> void { _delay = ms; }
 
-[[nodiscard]] auto AnimationTimer::getPosition() const -> double { return _position; }
+[[nodiscard]] auto KeyframeTimer::getPosition() const -> double { return _position; }
 
-auto AnimationTimer::play(AnimationDirection dir) -> void
+auto KeyframeTimer::play(Direction dir) -> void
 {
     _direction  = dir;
     _state      = State::Delay;
@@ -22,7 +22,7 @@ auto AnimationTimer::play(AnimationDirection dir) -> void
     }
 }
 
-auto AnimationTimer::tick() -> void
+auto KeyframeTimer::tick() -> void
 {
     if (_state == State::Idle) {
         return;
@@ -54,7 +54,7 @@ auto AnimationTimer::tick() -> void
         _position = std::chrono::duration_cast<std::chrono::duration<double>>(delta)
                   / std::chrono::duration_cast<std::chrono::duration<double>>(_duration);
 
-        if (_direction == AnimationDirection::reverse) {
+        if (_direction == Direction::reverse) {
             _position = 1.0 - _position;
         }
         if (onTick) {

@@ -15,7 +15,7 @@ struct PathExamples final : juce::Component
     auto paint(juce::Graphics& g) -> void override;
 
 private:
-    [[nodiscard]] static auto makeAnimation() -> AnimationSpec
+    [[nodiscard]] static auto makeAnimation() -> Animation::Spec
     {
         return {
             .duration  = std::chrono::milliseconds{2000},
@@ -36,9 +36,11 @@ struct TransitionExamples final : juce::Component
     auto resized() -> void override;
 
 private:
-    [[nodiscard]] static auto makeTransition() -> TransitionSpec
+    [[nodiscard]] static auto makeTransition() -> Transition::Spec
     {
-        return {.duration = std::chrono::milliseconds{2000}};
+        return {
+            .duration = std::chrono::milliseconds{2000},
+        };
     }
 
     Transition _tran{this, makeTransition()};
@@ -90,7 +92,7 @@ struct GridExamples final : juce::Component
     auto resized() -> void override;
 
 private:
-    static auto makeAnimation() -> AnimationSpec
+    [[nodiscard]] static auto makeAnimation() -> Animation::Spec
     {
         return {
             .duration       = std::chrono::milliseconds{600},
@@ -133,7 +135,7 @@ struct MainComponent final : juce::Component
     auto resized() -> void override;
 
 private:
-    static auto makeAnimation() -> neo::AnimationSpec
+    [[nodiscard]] static auto makeAnimation() -> neo::Animation::Spec
     {
         return {
             .duration       = std::chrono::milliseconds{600},
