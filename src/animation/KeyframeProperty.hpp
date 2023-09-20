@@ -16,8 +16,8 @@ struct KeyframeProperty
     auto keyframes(T const& from, T const& to) -> void
     {
         _frames.clear();
-        _frames.emplace_back(from, 0.0);
-        _frames.emplace_back(to, 1.0);
+        _frames.push_back(Keyframe<T>{from, 0.0});
+        _frames.push_back(Keyframe<T>{to, 1.0});
     }
 
     auto keyframes(std::span<Keyframe<T> const> frames) -> void
