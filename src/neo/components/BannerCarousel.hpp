@@ -136,14 +136,14 @@ private:
 
         auto layout() -> void
         {
-            using Traits = KeyframeTraits<juce::Rectangle<int>>;
+            auto interpolator = KeyframeInterpolator<juce::Rectangle<int>>{};
+            auto const pos    = static_cast<double>(_move.get());
 
-            auto const pos = static_cast<double>(_move.get());
-            _thumbnails[0].setBounds(Traits::interpolate(_current[0], _next[0], pos));
-            _thumbnails[1].setBounds(Traits::interpolate(_current[1], _next[1], pos));
-            _thumbnails[2].setBounds(Traits::interpolate(_current[2], _next[2], pos));
-            _thumbnails[3].setBounds(Traits::interpolate(_current[3], _next[3], pos));
-            _thumbnails[4].setBounds(Traits::interpolate(_current[4], _next[4], pos));
+            _thumbnails[0].setBounds(interpolator(_current[0], _next[0], pos));
+            _thumbnails[1].setBounds(interpolator(_current[1], _next[1], pos));
+            _thumbnails[2].setBounds(interpolator(_current[2], _next[2], pos));
+            _thumbnails[3].setBounds(interpolator(_current[3], _next[3], pos));
+            _thumbnails[4].setBounds(interpolator(_current[4], _next[4], pos));
         }
 
     private:

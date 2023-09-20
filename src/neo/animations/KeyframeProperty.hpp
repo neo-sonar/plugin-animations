@@ -1,6 +1,6 @@
 #pragma once
 
-#include "neo/animations/KeyframeTraits.hpp"
+#include "neo/animations/KeyframeInterpolator.hpp"
 
 #include <span>
 
@@ -75,7 +75,7 @@ auto KeyframeProperty<T>::get(double t) const -> T
     jassert(to != _frames.end());
 
     auto const pos = (t - from->position) / (to->position - from->position);
-    return KeyframeTraits<T>::interpolate(from->value, to->value, pos);
+    return KeyframeInterpolator<T>{}(from->value, to->value, pos);
 }
 
 }  // namespace neo
