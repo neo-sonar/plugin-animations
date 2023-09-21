@@ -20,7 +20,7 @@ struct Animation
         std::function<double(double)> timingFunction{TimingFunction::Linear};
     };
 
-    explicit Animation(juce::Component* parent, Spec spec);
+    Animation(juce::Component* parent, Spec spec);
 
     auto play(KeyframeTimer::Direction direction = KeyframeTimer::Direction::normal) -> void;
 

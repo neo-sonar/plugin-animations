@@ -19,38 +19,15 @@ struct Transition
         std::function<double(double)> timingFunction{TimingFunction::Linear};
     };
 
-    explicit Transition(juce::Component* parent, Spec spec) : _parent{parent}, _spec{std::move(spec)}
-    {
-        jassert(_parent != nullptr);
+    Transition(juce::Component* parent, Spec spec);
 
-        setDuration(_spec.duration);
-        setDelay(_spec.delay);
+    auto forward() -> void;
+    auto backward() -> void;
 
-        onTick        = [this] { _parent->repaint(); };
-        _timer.onTick = [this] {
-            if (this->onTick) {
-                this->onTick();
-            }
-        };
-    }
+    auto setDelay(std::chrono::milliseconds ms) -> void;
+    auto setDuration(std::chrono::milliseconds ms) -> void;
 
-    auto forward() -> void { _timer.play(KeyframeTimer::Direction::normal); }
-
-    auto backward() -> void { _timer.play(KeyframeTimer::Direction::reverse); }
-
-    [[nodiscard]] auto getPosition() const -> double { return _spec.timingFunction(_timer.getPosition()); }
-
-    auto setDuration(std::chrono::milliseconds ms) -> void
-    {
-        _spec.duration = ms;
-        _timer.setDuration(ms);
-    }
-
-    auto setDelay(std::chrono::milliseconds ms) -> void
-    {
-        _spec.delay = ms;
-        _timer.setDelay(ms);
-    }
+    [[nodiscard]] auto getPosition() const -> double;
 
     std::function<void()> onTick;
 

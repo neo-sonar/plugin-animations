@@ -38,6 +38,7 @@ target_sources(AnimationDemo
         "src/neo/animations/KeyframeProperty.hpp"
         "src/neo/animations/KeyframeInterpolator.hpp"
         "src/neo/animations/TimingFunction.hpp"
+        "src/neo/animations/Transition.cpp"
         "src/neo/animations/Transition.hpp"
 
         "src/neo/components/AnimatedButton.cpp"
