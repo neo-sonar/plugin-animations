@@ -8,14 +8,25 @@ auto KeyframeTimer::setDuration(std::chrono::milliseconds ms) -> void { _duratio
 
 auto KeyframeTimer::setDelay(std::chrono::milliseconds ms) -> void { _delay = ms; }
 
+auto KeyframeTimer::setClock(std::unique_ptr<Clock> clock) -> void
+{
+    if (clock == nullptr) {
+        return;
+    }
+    _clock = std::move(clock);
+}
+
 [[nodiscard]] auto KeyframeTimer::getPosition() const -> double { return _position; }
 
 auto KeyframeTimer::play(Direction dir) -> void
 {
+    if (_state == State::Idle and dir == Direction::normal) {
+        _position = 0.0;
+    }
+
     _direction  = dir;
     _state      = State::Delay;
-    _position   = 0.0;
-    _delayStart = std::chrono::system_clock::now();
+    _delayStart = _clock->now();
 
     if (not _vblankAttachment) {
         _vblankAttachment = std::make_unique<juce::VBlankAttachment>(_parent, [this] { tick(); });
@@ -29,16 +40,16 @@ auto KeyframeTimer::tick() -> void
     }
 
     if (_state == State::Delay) {
-        auto const delta = std::chrono::system_clock::now() - _delayStart;
+        auto const delta = _clock->now() - _delayStart;
         if (delta >= _delay) {
             _state           = State::Transition;
-            _transitionStart = std::chrono::system_clock::now();
+            _transitionStart = _clock->now();
         }
         return;
     }
 
     if (_state == State::Transition) {
-        auto now   = std::chrono::system_clock::now();
+        auto now   = _clock->now();
         auto delta = now - _transitionStart;
         if (delta > _duration) {
             if (_isLooping) {
