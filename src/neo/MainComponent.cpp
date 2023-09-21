@@ -17,22 +17,22 @@ MainComponent::MainComponent()
 {
     // _expand.setKeyframes(0.0F, 1.0F);
 
-    addAndMakeVisible(_pathToggle);
-    addAndMakeVisible(_transitionToggle);
     addAndMakeVisible(_widgetsToggle);
     addAndMakeVisible(_bannersToggle);
     addAndMakeVisible(_gridsToggle);
-    addAndMakeVisible(_path);
-    addAndMakeVisible(_transition);
+    addAndMakeVisible(_timingToggle);
+    addAndMakeVisible(_pathToggle);
     addAndMakeVisible(_widgets);
     addAndMakeVisible(_banners);
     addAndMakeVisible(_grids);
+    addAndMakeVisible(_timing);
+    addAndMakeVisible(_path);
 
-    _tabs.addTab({&_pathToggle, &_path});
-    _tabs.addTab({&_transitionToggle, &_transition});
     _tabs.addTab({&_widgetsToggle, &_widgets});
     _tabs.addTab({&_bannersToggle, &_banners});
     _tabs.addTab({&_gridsToggle, &_grids});
+    _tabs.addTab({&_timingToggle, &_timing});
+    _tabs.addTab({&_pathToggle, &_path});
     _tabs.onTabSelect = [this](auto const& prev, auto const& next) {
         _prev = prev.button;
         _next = next.button;
@@ -57,10 +57,10 @@ auto MainComponent::paint(juce::Graphics& g) -> void
 
     g.setColour(juce::Colours::black);
     g.fillRoundedRectangle(_pathToggle.getBounds().toFloat(), 8.0F);
-    g.fillRoundedRectangle(_transitionToggle.getBounds().toFloat(), 8.0F);
     g.fillRoundedRectangle(_widgetsToggle.getBounds().toFloat(), 8.0F);
     g.fillRoundedRectangle(_bannersToggle.getBounds().toFloat(), 8.0F);
     g.fillRoundedRectangle(_gridsToggle.getBounds().toFloat(), 8.0F);
+    g.fillRoundedRectangle(_timingToggle.getBounds().toFloat(), 8.0F);
 
     g.setColour(juce::Colours::green);
     g.fillRoundedRectangle(_expand.get().toFloat(), 8.0F);
@@ -83,11 +83,11 @@ auto MainComponent::resized() -> void
     grid.rowGap          = 4_px;
     grid.columnGap       = 4_px;
     grid.items           = {
-        GridItem{_pathToggle},
-        GridItem{_transitionToggle},
         GridItem{_widgetsToggle},
         GridItem{_bannersToggle},
         GridItem{_gridsToggle},
+        GridItem{_timingToggle},
+        GridItem{_pathToggle},
     };
     grid.performLayout(controls);
 

@@ -5,7 +5,7 @@
 #include "neo/examples/BannerExamples.hpp"
 #include "neo/examples/GridExamples.hpp"
 #include "neo/examples/PathExamples.hpp"
-#include "neo/examples/TransitionExamples.hpp"
+#include "neo/examples/TimingExamples.hpp"
 #include "neo/examples/WidgetsExamples.hpp"
 
 namespace neo {
@@ -44,17 +44,17 @@ private:
     juce::Button* _prev{nullptr};
     juce::Button* _next{nullptr};
 
-    neo::TabButton _pathToggle{"path"};
-    neo::TabButton _transitionToggle{"transition"};
     neo::TabButton _widgetsToggle{"widgets"};
     neo::TabButton _bannersToggle{"banners"};
     neo::TabButton _gridsToggle{"grids"};
+    neo::TabButton _timingToggle{"timing"};
+    neo::TabButton _pathToggle{"path"};
 
-    neo::PathExamples _path{};
-    neo::TransitionExamples _transition{};
     neo::WidgetsExamples _widgets{};
     neo::BannerExamples _banners{};
     neo::GridExamples _grids{};
+    neo::TimingExamples _timing{};
+    neo::PathExamples _path{};
 
     neo::TabSelector _tabs;
 };

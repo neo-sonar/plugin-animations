@@ -54,8 +54,8 @@ target_sources(AnimationDemo
         "src/neo/examples/GridExamples.cpp"
         "src/neo/examples/PathExamples.hpp"
         "src/neo/examples/PathExamples.cpp"
-        "src/neo/examples/TransitionExamples.hpp"
-        "src/neo/examples/TransitionExamples.cpp"
+        "src/neo/examples/TimingExamples.hpp"
+        "src/neo/examples/TimingExamples.cpp"
         "src/neo/examples/WidgetsExamples.hpp"
         "src/neo/examples/WidgetsExamples.cpp"
 
